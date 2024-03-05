@@ -12,3 +12,107 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+enum Role {
+  ADMIN
+  USER
+  EMP
+}
+enum CLIENT_TYPE {
+  CUSTOMER
+  SUPPLIER
+}
+enum TXN_TYPE {
+  GAVE
+  GOT
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  phone     String
+  password  String
+  email     String   @unique
+  store     Store[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // Define foreign key relationship to the Profile model
+  role      Role    @default(USER)
+}
+
+model Store {
+  id        Int   @id @default(autoincrement())
+  name      String
+  location  String
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Define foreign key relationship to the User model
+  User        User          @relation(fields: [userId], references: [id])
+  userId      String
+  Transaction Transaction[]
+  Employee    Employee[]
+  Client      Client[]
+  @@unique([name, userId], name: "unique_store_name_user")
+}
+
+model Client {
+  id        String   @id @default(uuid())
+  name      String
+  phone     String  @unique
+  address   String
+  city      String?
+  state     String?
+  country   String?
+  clientType  CLIENT_TYPE
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Define foreign key relationship to the Store model
+  Store    Store    @relation(fields: [storeId], references: [id])
+  storeId Int   @map("storeId")
+  Transaction Transaction[]
+}
+
+model Transaction {
+  id          String   @id @default(uuid())
+  amount      Float
+  description String
+  date        DateTime
+  attachBill  String?
+  clientType  CLIENT_TYPE
+  txnType    TXN_TYPE @default(GAVE)
+
+  createTime  DateTime @default(now()) @map("createTime")
+  updateTime  DateTime @default(now()) @map("updateTime")
+
+  // Define foreign key relationship to the Store model
+  Store       Store  @relation(fields: [storeId], references: [id])
+  storeId     Int @map("storeId")
+
+  Customer    Client @relation(fields: [clientId], references: [id])
+  clientId    String
+}
+
+model Employee {
+  id        String   @id @default(uuid())
+  name      String
+  phone     String   @unique
+  address   String
+  city      String?
+  state     String?
+  country   String?
+  salary    Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Define foreign key relationship to the Store model
+  Store    Store  @relation(fields: [storeId], references: [id])
+  storeId Int @map("storeId")
+}
