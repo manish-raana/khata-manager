@@ -1,4 +1,4 @@
-import RegisterComponent from "@/components/Register";
+import RegisterComponent from "@/components/auth/Register";
 import Link from "next/link";
 import React from "react";
 import { headers } from "next/headers";

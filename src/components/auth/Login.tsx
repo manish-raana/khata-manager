@@ -1,18 +1,19 @@
 'use client'
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LoginFormSchema, LoginFormType } from "@/lib/zod";
-import { Icons } from "./ui/icons";
+import { Icons } from "../ui/icons";
 
 type Props = {
+  error:any;
   signIn: any;
 };
 
-const LoginComponent = ({ signIn }: Props) => {
+const LoginComponent = ({ error, signIn }: Props) => {
   const [loading, setLoading] = useState(false);
   const form = useForm<LoginFormType>({
     resolver: zodResolver(LoginFormSchema),
@@ -21,12 +22,17 @@ const LoginComponent = ({ signIn }: Props) => {
       password: "",
     },
   });
+  useEffect(() => {
+    form.reset();
+    setLoading(false);
+  }, [error]);
   function onSubmit(values: LoginFormType) {
     setLoading(true);
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
     signIn(values);
+    
   }
   return (
     <Form {...form}>
@@ -57,7 +63,7 @@ const LoginComponent = ({ signIn }: Props) => {
             </FormItem>
           )}
         />
-        <Button disabled={ loading} type="submit" size={"lg"}>
+        <Button disabled={loading} type="submit" size={"lg"}>
           {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
           Login
         </Button>

@@ -11,7 +11,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import AuthButton from "../AuthButton";
+import AuthButton from "../auth/AuthButton";
 import { createClient } from "@/utils/supabase/server";
 
 export async function UserNav() {

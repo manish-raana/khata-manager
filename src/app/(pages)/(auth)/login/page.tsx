@@ -1,7 +1,7 @@
 import React from 'react'
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
-import LoginComponent from '@/components/Login';
+import LoginComponent from '@/components/auth/Login';
 import Link from 'next/link';
 import { LoginFormType } from '@/lib/zod';
 
@@ -34,7 +34,7 @@ const LoginPage = ({ searchParams }: { searchParams: { message: string } }) => {
             <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Login to your account</h1>
             <p className="text-sm text-muted-foreground">Enter your login details to access your account</p>
           </div>
-          <LoginComponent signIn={signIn} />
+          <LoginComponent error={searchParams.message} signIn={signIn} />
           <p className="text-start text-sm text-muted-foreground">
             Have not registered yet,
             <Link href="/register" className="ml-2 underline underline-offset-4 hover:text-primary">

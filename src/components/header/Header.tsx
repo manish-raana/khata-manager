@@ -1,9 +1,9 @@
 import React from 'react'
-import TeamSwitcher from './dashboard/store-switcher';
-import { MainNav } from './dashboard/main-nav';
-import { Search } from './dashboard/search';
-import { ThemeModeToggle } from './theme/Toggle';
-import { UserNav } from './dashboard/user-nav';
+import TeamSwitcher from './store-switcher';
+import { MainNav } from './main-nav';
+import { Search } from './search';
+import { ThemeModeToggle } from '../theme/Toggle';
+import { UserNav } from './user-nav';
 
 const Header = () => {
   return (

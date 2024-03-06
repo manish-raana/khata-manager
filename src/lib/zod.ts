@@ -22,3 +22,13 @@ export const LoginFormSchema = z
             .min(6)
     });
 export type LoginFormType = z.infer<typeof LoginFormSchema>;
+
+export const AddStoreFormSchema = z
+    .object({
+      name: z.string().min(2, { message: "Please enter a store name!" }),
+      address: z.object({
+        city: z.string().min(2, { message: "Please enter a city!" }),
+        state: z.string().min(2,{message: "Please select a state!"}),
+      })
+    });
+export type AddStoreFormType = z.infer<typeof AddStoreFormSchema>;

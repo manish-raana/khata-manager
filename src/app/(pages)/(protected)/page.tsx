@@ -1,17 +1,12 @@
 import { Metadata } from "next";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CalendarDateRangePicker } from "@/components/dashboard/date-range-picker";
-import { MainNav } from "@/components/dashboard/main-nav";
 import { Overview } from "@/components/dashboard/overview";
 import { RecentSales } from "@/components/dashboard/recent-sales";
-import { Search } from "@/components/dashboard/search";
-import TeamSwitcher from "@/components/dashboard/store-switcher";
-import { UserNav } from "@/components/dashboard/user-nav";
-import { ThemeModeToggle } from "@/components/theme/Toggle";
-
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -19,6 +14,11 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage() {
+  const supabase = createClient();
+  const { data, error } = await supabase.auth.getUser();
+  if (error || !data?.user) {
+    redirect("/login");
+  }
   return (
         <div className="flex-1 space-y-4 p-8 pt-6">
           <div className="flex items-center justify-between space-y-2">
