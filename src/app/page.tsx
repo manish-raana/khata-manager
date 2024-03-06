@@ -8,7 +8,7 @@ import { MainNav } from "@/components/dashboard/main-nav";
 import { Overview } from "@/components/dashboard/overview";
 import { RecentSales } from "@/components/dashboard/recent-sales";
 import { Search } from "@/components/dashboard/search";
-import TeamSwitcher from "@/components/dashboard/team-switcher";
+import TeamSwitcher from "@/components/dashboard/store-switcher";
 import { UserNav } from "@/components/dashboard/user-nav";
 import { ThemeModeToggle } from "@/components/theme/Toggle";
 

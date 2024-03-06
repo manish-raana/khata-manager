@@ -1,5 +1,5 @@
 import React from 'react'
-import TeamSwitcher from './dashboard/team-switcher';
+import TeamSwitcher from './dashboard/store-switcher';
 import { MainNav } from './dashboard/main-nav';
 import { Search } from './dashboard/search';
 import { ThemeModeToggle } from './theme/Toggle';

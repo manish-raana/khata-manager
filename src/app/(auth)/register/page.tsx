@@ -15,10 +15,10 @@ const RegisterPage = ({ searchParams }: { searchParams: { message: string } }) =
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      phone,
       options: {
         data: {
           name: name,
+          phone: phone,
         },
         emailRedirectTo: `${origin}/auth/callback`,
       },
