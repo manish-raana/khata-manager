@@ -15,13 +15,11 @@ export default async function CustomerPage() {
           <Button>Download</Button>
         </div>
       </div>
-      <div className='md:flex items-start gap-4 w-full'>
+      <div className='md:flex items-end mt-0 gap-4 w-full'>
         <div className="md:w-[45%] w-full">
           <UserListComponent />
-          
         </div>
         <div className="md:w-[45%] w-full">
-        
           <TransactionsList />
         </div>
       </div>

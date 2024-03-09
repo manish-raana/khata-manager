@@ -6,4 +6,5 @@ export type IClientType = {
   netBalance: number;
   date: string;
   txnType?: ITxnType;
+  updated_at:string
 };

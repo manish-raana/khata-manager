@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import RecoilRootWrapper from "@/wrappers/RecoilRootWrapper";
 import "./globals.css";
+import "react-phone-number-input/style.css";
+
 import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });

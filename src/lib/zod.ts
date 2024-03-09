@@ -1,4 +1,7 @@
+import { isValidPhoneNumber } from "react-phone-number-input";
 import { z } from "zod";
+
+export const CLIENT_TYPE_ENUM = z.enum(["CUSTOMER", "SUPPLIER", "EMPLOYEE"]);
 
 export const RegisterFormSchema = z
   .object({
@@ -26,9 +29,16 @@ export type LoginFormType = z.infer<typeof LoginFormSchema>;
 export const AddStoreFormSchema = z
     .object({
       name: z.string().min(2, { message: "Please enter a store name!" }),
-      address: z.object({
-        city: z.string().min(2, { message: "Please enter a city!" }),
-        state: z.string().min(2,{message: "Please select a state!"}),
-      })
-    });
+      address: z.string().min(2, { message: "Please enter store adrress!" })
+    })
 export type AddStoreFormType = z.infer<typeof AddStoreFormSchema>;
+
+export const AddClientFormSchema = z.object({
+  name: z.string().min(2, { message: "Please enter a name!" }),
+  phone: z.string().refine(isValidPhoneNumber, { message: "Invalid phone number" }),
+  client_type: z.enum(["CUSTOMER", "SUPPLIER", "EMPLOYEE"],{
+    required_error: "You need to select a Client type.",
+  }),
+  address: z.string().min(2, { message: "Please enter an address!" }),
+});
+export type AddClientFormType = z.infer<typeof AddClientFormSchema>;

@@ -1,6 +1,6 @@
 'use client'
 import { Input } from './ui/input';
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Button } from './ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { createClient } from '@/utils/supabase/client';
@@ -27,10 +27,7 @@ const AddStore = ({ getStoreList, setShowNewStoreDialog }:any) => {
       resolver: zodResolver(AddStoreFormSchema),
       defaultValues: {
           name: "",
-          address: {
-            city: "",
-            state: ""
-        },
+          address: "",
       },
     });
     const addAddress = async (addressData:{city:string, state:string}) => {
@@ -46,7 +43,7 @@ const AddStore = ({ getStoreList, setShowNewStoreDialog }:any) => {
         }
         return addressResponse[0];
     };
-    const addStore = async (storeData: { name: string; address_id: number }) => {
+    const addStore = async (storeData: { name: string, address: string }) => {
       const { data: storeResponse, error: storeError } = await supabase.from("store").insert([storeData]).select();
       if (storeError) {
         console.error("Error adding store: ", storeError);
@@ -77,13 +74,11 @@ const AddStore = ({ getStoreList, setShowNewStoreDialog }:any) => {
         setLoading(false);
         return;
       }
-      const addressResponse = await addAddress(values.address);
-      if (addressResponse && addressResponse.id) {
-        const storeResponse = await addStore({ name: values.name, address_id: addressResponse.id });
+        const storeResponse = await addStore(values);
         console.log("storeResponse", storeResponse);
         getStoreList();
         setShowNewStoreDialog(false);
-      }
+      
       setLoading(false);
     }
   return (
@@ -104,41 +99,18 @@ const AddStore = ({ getStoreList, setShowNewStoreDialog }:any) => {
         />
         <FormField
           control={form.control}
-          name="address.city"
+          name="address"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>City</FormLabel>
+              <FormLabel>Address</FormLabel>
               <FormControl>
-                <Input type="text" placeholder="Enter store city..." {...field} />
+                <Input type="text" placeholder="Enter store address..." {...field} />
               </FormControl>
               <FormMessage className="text-xs" />
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="address.state"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>State</FormLabel>
-              <FormControl>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select store state" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {stateList?.map((state: IState) => (
-                      <SelectItem className="cursor-pointer" key={state.id} value={state.id}>
-                        <span className="font-medium">{state.name}</span>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage className="text-xs" />
-            </FormItem>
-          )}
-        />
+        
         <div className="flex items-center space-x-4">
           <Button type='button' variant="outline" onClick={() => setShowNewStoreDialog(false)}>
             Cancel
