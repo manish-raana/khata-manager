@@ -1,34 +1,40 @@
-"use client";
-import { createClient } from "@/utils/supabase/client";
-import { useEffect } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { txnsListState } from "../atoms/txns";
-import { selectedClientState } from "../atoms/clients";
+'use client'
+import { createClient } from '@/utils/supabase/client'
+import { useEffect } from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { txnsListState } from '../atoms/txns'
+import { selectedClientState } from '../atoms/clients'
 
 const useTxnsList = () => {
   const [txnsList, setTxnsList] = useRecoilState(txnsListState)
-  const supabase = createClient();
-  const selectedClient = useRecoilValue(selectedClientState);
+  const supabase = createClient()
+  const selectedClient = useRecoilValue(selectedClientState)
 
   const getTxnsList = async () => {
+    setTxnsList([])
     console.log('selectedClient', selectedClient)
-    const { data, error } = await supabase.from("transactions").select("*").eq("id", `${selectedClient?.id!}`);
+    const { data, error } = await supabase
+      .from('transactions')
+      .select('*')
+      .eq('client_id', `${selectedClient?.id!}`)
     if (error) {
-      console.error("Error fetching txns: ", error);
-      return;
+      console.error('Error fetching txns: ', error)
+      return
     }
-    console.log(data);
+    console.log(data)
     if (data && data.length > 0) {
-      setTxnsList(data);
-      console.log(data);
+      setTxnsList(data)
+      console.log(data)
     }
-  };
+  }
 
   useEffect(() => {
-    getTxnsList();
-  }, [selectedClient, supabase]);
+    if (selectedClient) {
+      getTxnsList()
+    }
+  }, [selectedClient, supabase])
 
-  return { txnsList, getTxnsList };
-};
+  return { txnsList, getTxnsList }
+}
 
-export default useTxnsList;
+export default useTxnsList

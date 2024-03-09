@@ -1,12 +1,13 @@
-export type ITxnType = "give" | "get" | "settled";
+export type ITxnType = 'give' | 'get' | 'settled'
 export type IClientType = {
-  id: number;
-  name: string;
-  phone: string;
-  netBalance: number;
-  date: string;
-  txnType?: ITxnType;
-  address: string;
+  id: number
+  name: string
+  phone: string
+  netBalance: number
+  date: string
+  txnType?: ITxnType
+  address: string
   updated_at: string
-  store_id:number
-};
+  store_id: number
+  client_type: 'CUSTOMER' | 'SUPPLIER' | 'EMPLOYEE'
+}
