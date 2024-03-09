@@ -24,20 +24,18 @@ const UserListComponent = () => {
           <ListSearch />
           <ListFilter />
         </div>
-        <Card className="bg-gray-100 rounded-xl min-h-[500px] w-full p-0">
+        <div className="bg-gray-100 rounded-md max-h-[650px] w-full p-0 dark:bg-black dark:text-white">
           <CardHeader columns={columns} />
           <div className="items-center justify-center h-96 hidden">
             <p className="text-center text-gray-500 mt-4 text-2xl">No Data Available</p>
           </div>
-          <ScrollArea className="h-[580px] w-full rounded-md border">
+          <ScrollArea className="h-[650px] w-full  border">
             {clientList.map((item: IClientType) => (
               <CardRow key={item.id} client={item} />
             ))}
           </ScrollArea>
-        </Card>
-        <div className="flex justify-end w-full">
-          <AddNewClient clientType={"Customer"} />
         </div>
+        
       </div>
     );
 }
@@ -54,7 +52,10 @@ const CardRow = ({ client }: { client: IClientType}) => {
   };
   return (
     <div
-      className={cn("flex items-center justify-between px-5 py-5 w-full even:bg-gray-50 cursor-pointer", selectedClient?.id === client.id && "bg-blue-200")}
+      className={cn(
+        "flex items-center justify-between px-5 py-5 w-full cursor-pointer",
+        selectedClient?.id === client.id ? "bg-gray-400" : "even:bg-gray-50 even:dark:bg-gray-900 dark:text-white"
+      )}
       onClick={(e) => setSelectedClient(client)}
     >
       <p className="w-full text-start">{formatDate(client.updated_at)}</p>
@@ -76,7 +77,7 @@ const CardRow = ({ client }: { client: IClientType}) => {
 };
 const CardHeader = ({ columns }: {columns:any}) => {
     return (
-      <div className="flex items-center justify-between px-5 py-2 bg-black text-white rounded-t-xl">
+      <div className="flex items-center justify-between px-5 py-2 bg-gray-200 light:text-black rounded-t-md">
         {columns.map((item:any, index:any) => (
           <CardHeaderItem key={index} className={index === columns.length - 1 && "text-end"}>
             {item}
@@ -125,12 +126,12 @@ const ListFilter = () => {
 }
 const ListSearch = () => { 
     return (
-        <div className='w-full'>
-            <Label>Search for customers</Label>
-            <div className="relative">
-                <Search className="absolute left-2 top-3 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="search by name or phone number" className="pl-8" />
-            </div>
+      <div className="w-full">
+        <Label>Search for customers</Label>
+        <div className="relative">
+          <Search className="absolute left-2 top-3 h-4 w-4 text-muted-foreground" />
+          <Input type="search" placeholder="search by name or phone number" className="pl-8" />
         </div>
+      </div>
     );
 }

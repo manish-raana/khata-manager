@@ -1,17 +1,20 @@
 "use client";
 import { createClient } from "@/utils/supabase/client";
 import { useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { txnsListState } from "../atoms/txns";
+import { selectedClientState } from "../atoms/clients";
 
 const useTxnsList = () => {
   const [txnsList, setTxnsList] = useRecoilState(txnsListState)
   const supabase = createClient();
+  const selectedClient = useRecoilValue(selectedClientState);
 
   const getTxnsList = async () => {
-    const { data, error } = await supabase.from("clients").select("*");
+    console.log('selectedClient', selectedClient)
+    const { data, error } = await supabase.from("transactions").select("*").eq("id", `${selectedClient?.id!}`);
     if (error) {
-      console.error("Error fetching stores: ", error);
+      console.error("Error fetching txns: ", error);
       return;
     }
     console.log(data);
@@ -20,9 +23,10 @@ const useTxnsList = () => {
       console.log(data);
     }
   };
+
   useEffect(() => {
     getTxnsList();
-  }, [supabase]);
+  }, [selectedClient, supabase]);
 
   return { txnsList, getTxnsList };
 };
