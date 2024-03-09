@@ -18,12 +18,15 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { IClientType } from '@/types/client'
 import { selectedClientState } from '@/store/atoms/clients'
 import useClients from '@/store/hooks/useClients'
-import { formatDate } from '@/utils/formatDate'
 import { selectedStoresState } from '@/store/atoms/stores'
 
-const UserListComponent = () => {
-  const { clientList, getClientList } = useClients('CUSTOMER')
-
+const UserListComponent = ({
+  clientType,
+}: {
+  clientType: 'SUPPLIER' | 'CUSTOMER'
+}) => {
+  const { clientList, getClientList } = useClients(clientType)
+  const [searchQuery, setSearchQuery] = useState('')
   const selectedStore = useRecoilValue(selectedStoresState)
   const setSelectedClient = useSetRecoilState(selectedClientState)
 
@@ -32,16 +35,22 @@ const UserListComponent = () => {
     setSelectedClient(null)
   }, [selectedStore])
 
+  const filteredClientList = useMemo(() => {
+    return clientList.filter((client) =>
+      client.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  }, [clientList, searchQuery])
+
   const columns = ['Name', 'Phone', 'NET Balance']
   return (
     <div className="flex flex-col space-y-4 w-full">
       <div className="flex items-center space-x-4">
-        <ListSearch />
+        <ListSearch setSearchQuery={setSearchQuery} />
         <ListFilter />
       </div>
       <div className="bg-gray-100 rounded-md max-h-[690px] w-full p-0 dark:bg-black dark:text-white relative">
         <CardHeader columns={columns} />
-        {clientList.length === 0 && (
+        {filteredClientList.length === 0 && (
           <div className="flex w-full h-[600px] items-center justify-center absolute">
             <p className="text-center text-gray-500 mt-4 text-2xl">
               No Data Available
@@ -49,7 +58,7 @@ const UserListComponent = () => {
           </div>
         )}
         <ScrollArea className="h-[600px] w-full  border">
-          {clientList.map((item: IClientType) => (
+          {filteredClientList.map((item: IClientType) => (
             <CardRow key={item.id} client={item} />
           ))}
         </ScrollArea>
@@ -154,7 +163,10 @@ const ListFilter = () => {
     </div>
   )
 }
-const ListSearch = () => {
+const ListSearch = ({ setSearchQuery }: any) => {
+  const handleSearchChange = (event: any) => {
+    setSearchQuery(event.target.value)
+  }
   return (
     <div className="w-full">
       <Label>Search for customers</Label>
@@ -164,6 +176,7 @@ const ListSearch = () => {
           type="search"
           placeholder="search by name or phone number"
           className="pl-8"
+          onChange={handleSearchChange}
         />
       </div>
     </div>

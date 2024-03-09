@@ -1,19 +1,24 @@
-import { CalendarDateRangePicker } from '@/components/dashboard/date-range-picker';
-import { Button } from '@/components/ui/button';
+import { AddNewClient } from '@/components/AddClient'
+import TransactionsList from '@/components/TransactionsList'
+import UserListComponent from '@/components/UserListComponent'
 import React from 'react'
 
-const SupplierPage = () => {
+export default async function SupplierPage() {
   return (
-    <div className="flex-1 space-y-4 p-8 pt-6">
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Suppliers</h2>
-        <div className="flex items-center space-x-2">
-          <CalendarDateRangePicker />
-          <Button>Download</Button>
+    <div className="flex-1 space-y-4 p-8 pt-6 px-24">
+      <div className="md:flex justify-between items-start mt-0 gap-4 w-full">
+        <div className="md:w-[48%] w-full space-y-10">
+          <div className="flex items-center justify-between w-full">
+            <h2 className="text-3xl font-bold tracking-tight">Suppliers</h2>
+            <AddNewClient clientType={'SUPPLIER'} />
+          </div>
+
+          <UserListComponent clientType={'SUPPLIER'} />
+        </div>
+        <div className="md:w-[48%] w-full">
+          <TransactionsList />
         </div>
       </div>
     </div>
-  );
+  )
 }
-
-export default SupplierPage

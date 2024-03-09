@@ -1,8 +1,6 @@
 import { AddNewClient } from '@/components/AddClient'
 import TransactionsList from '@/components/TransactionsList'
 import UserListComponent from '@/components/UserListComponent'
-import { CalendarDateRangePicker } from '@/components/dashboard/date-range-picker'
-import { Button } from '@/components/ui/button'
 import React from 'react'
 
 export default async function CustomerPage() {
@@ -12,10 +10,10 @@ export default async function CustomerPage() {
         <div className="md:w-[48%] w-full space-y-10">
           <div className="flex items-center justify-between w-full">
             <h2 className="text-3xl font-bold tracking-tight">Customers</h2>
-            <AddNewClient clientType={'Customer'} />
+            <AddNewClient clientType={'CUSTOMER'} />
           </div>
 
-          <UserListComponent />
+          <UserListComponent clientType={'CUSTOMER'} />
         </div>
         <div className="md:w-[48%] w-full">
           <TransactionsList />
