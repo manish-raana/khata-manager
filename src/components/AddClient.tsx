@@ -31,16 +31,17 @@ import {
 import { Icons } from './ui/icons'
 import { RadioGroup, RadioGroupItem } from './ui/radio-group'
 import { PhoneInput } from '@/components/ui/phone-input'
-import useStoreList from '@/store/hooks/useStoreList'
 import useClients from '@/store/hooks/useClients'
+import { useRecoilValue } from 'recoil'
+import { selectedStoresState } from '@/store/atoms/stores'
 
 export function AddNewClient({ clientType }: { clientType: string }) {
   const [loading, setLoading] = useState<boolean>(false)
   const [showNewStoreDialog, setShowNewStoreDialog] = useState(false)
-  const { selectedStore } = useStoreList()
   const { toast } = useToast()
   const supabase = createClient()
   const { getClientList } = useClients(clientType)
+  const selectedStore = useRecoilValue(selectedStoresState)
 
   const form = useForm<AddClientFormType>({
     resolver: zodResolver(AddClientFormSchema),
