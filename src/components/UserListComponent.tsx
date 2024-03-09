@@ -1,6 +1,6 @@
 'use client'
 import { Search } from 'lucide-react'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 import TimeAgo from 'react-timeago'
@@ -19,9 +19,18 @@ import { IClientType } from '@/types/client'
 import { selectedClientState } from '@/store/atoms/clients'
 import useClients from '@/store/hooks/useClients'
 import { formatDate } from '@/utils/formatDate'
+import { selectedStoresState } from '@/store/atoms/stores'
 
 const UserListComponent = () => {
-  const { clientList } = useClients('CUSTOMER')
+  const { clientList, getClientList } = useClients('CUSTOMER')
+
+  const selectedStore = useRecoilValue(selectedStoresState)
+  const setSelectedClient = useSetRecoilState(selectedClientState)
+
+  useEffect(() => {
+    getClientList()
+    setSelectedClient(null)
+  }, [selectedStore])
 
   const columns = ['Name', 'Phone', 'NET Balance']
   return (
@@ -30,14 +39,16 @@ const UserListComponent = () => {
         <ListSearch />
         <ListFilter />
       </div>
-      <div className="bg-gray-100 rounded-md max-h-[650px] w-full p-0 dark:bg-black dark:text-white">
+      <div className="bg-gray-100 rounded-md max-h-[690px] w-full p-0 dark:bg-black dark:text-white relative">
         <CardHeader columns={columns} />
-        <div className="items-center justify-center h-96 hidden">
-          <p className="text-center text-gray-500 mt-4 text-2xl">
-            No Data Available
-          </p>
-        </div>
-        <ScrollArea className="h-[650px] w-full  border">
+        {clientList.length === 0 && (
+          <div className="flex w-full h-[600px] items-center justify-center absolute">
+            <p className="text-center text-gray-500 mt-4 text-2xl">
+              No Data Available
+            </p>
+          </div>
+        )}
+        <ScrollArea className="h-[600px] w-full  border">
           {clientList.map((item: IClientType) => (
             <CardRow key={item.id} client={item} />
           ))}
@@ -65,7 +76,12 @@ const CardRow = ({ client }: { client: IClientType }) => {
     >
       <p className="w-full text-start flex flex-col">
         <span>{client.name}</span>{' '}
-        <span className="text-xs font-normal text-gray-400 ml-1">
+        <span
+          className={cn(
+            'text-xs font-normal ml-1',
+            selectedClient?.id === client.id ? 'text-gray-800' : 'text-gray-400'
+          )}
+        >
           <TimeAgo date={client.updated_at} />
         </span>
       </p>
