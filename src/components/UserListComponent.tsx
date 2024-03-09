@@ -1,6 +1,6 @@
 'use client'
 import { Search } from 'lucide-react'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 import TimeAgo from 'react-timeago'
@@ -14,26 +14,52 @@ import {
 } from './ui/select'
 import { cn } from '@/lib/utils'
 import { ScrollArea } from './ui/scroll-area'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { IClientType } from '@/types/client'
-import { selectedClientState } from '@/store/atoms/clients'
+import { clientListState, selectedClientState } from '@/store/atoms/clients'
 import useClients from '@/store/hooks/useClients'
 import { selectedStoresState } from '@/store/atoms/stores'
+import { createClient } from '@/utils/supabase/client'
 
 const UserListComponent = ({
   clientType,
 }: {
   clientType: 'SUPPLIER' | 'CUSTOMER'
 }) => {
-  const { clientList, getClientList } = useClients(clientType)
   const [searchQuery, setSearchQuery] = useState('')
   const selectedStore = useRecoilValue(selectedStoresState)
   const setSelectedClient = useSetRecoilState(selectedClientState)
+  const [clientList, setClientList] = useRecoilState(clientListState)
+
+  const supabase = createClient()
+
+  const getClientList = async (_clientType: string, _storeId: number) => {
+    setClientList([])
+    console.log('fetching client list')
+    const { data, error } = await supabase
+      .from('clients')
+      .select('*')
+      .eq('client_type', _clientType)
+      .eq('store_id', _storeId)
+
+    if (error) {
+      console.error('Error fetching clients: ', error)
+      return
+    }
+    if (data && data.length > 0) {
+      setClientList(data)
+      console.log(data)
+    }
+  }
+
+  const memoizedGetClientList = useMemo(
+    () => getClientList,
+    [clientType, selectedStore?.id!]
+  )
 
   useEffect(() => {
-    getClientList()
-    setSelectedClient(null)
-  }, [selectedStore])
+    memoizedGetClientList(clientType, selectedStore?.id!)
+  }, [memoizedGetClientList, clientType, selectedStore?.id!])
 
   const filteredClientList = useMemo(() => {
     return clientList.filter((client) =>

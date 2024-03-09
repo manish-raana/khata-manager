@@ -1,14 +1,7 @@
 'use client'
 import { Input } from './ui/input'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Button } from './ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { createClient } from '@/utils/supabase/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -23,19 +16,14 @@ import {
 import { AddStoreFormSchema, AddStoreFormType } from '@/lib/zod'
 import { Icons } from './ui/icons'
 import { useToast } from '@/components/ui/use-toast'
-import { useRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 import { storesListState } from '@/store/atoms/stores'
-
-type IState = {
-  id: string
-  name: string
-}
 
 const AddStore = ({ setShowNewStoreDialog }: any) => {
   const [loading, setLoading] = useState<boolean>(false)
-  const { toast } = useToast()
+  const { toast }: { toast: any } = useToast()
   const supabase = createClient()
-  const [storeList, setStoreList] = useRecoilState(storesListState)
+  const setStoreList = useSetRecoilState(storesListState)
 
   const form = useForm<AddStoreFormType>({
     resolver: zodResolver(AddStoreFormSchema),

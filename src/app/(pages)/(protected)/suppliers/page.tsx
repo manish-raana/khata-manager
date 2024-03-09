@@ -3,7 +3,7 @@ import TransactionsList from '@/components/TransactionsList'
 import UserListComponent from '@/components/UserListComponent'
 import React from 'react'
 
-export default async function SupplierPage() {
+export default function SupplierPage() {
   return (
     <div className="flex-1 space-y-4 p-8 pt-6 px-24">
       <div className="md:flex justify-between items-start mt-0 gap-4 w-full">

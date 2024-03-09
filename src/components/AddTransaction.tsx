@@ -249,7 +249,7 @@ export function AddNewTransaction({
                       {loading && (
                         <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                       )}
-                      Save Changes
+                      Add Entry
                     </Button>
                   </div>
                 </div>

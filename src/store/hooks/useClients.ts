@@ -1,24 +1,21 @@
 'use client'
 import { createClient } from '@/utils/supabase/client'
-import { useEffect } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { clientListState, selectedClientState } from '../atoms/clients'
-import { selectedStoresState } from '../atoms/stores'
 
-const useClientList = (client_type: string) => {
+const useClientList = () => {
   const [clientList, setClientList] = useRecoilState(clientListState)
-  const selectedStore = useRecoilValue(selectedStoresState)
   const [selectedClient, setSelectedClient] =
     useRecoilState(selectedClientState)
   const supabase = createClient()
 
-  const getClientList = async () => {
+  const getClientList = async (clientType: string, storeId: number) => {
     setClientList([])
     const { data, error } = await supabase
       .from('clients')
       .select('*')
-      .eq('client_type', client_type)
-      .eq('store_id', `${selectedStore?.id!}`)
+      .eq('client_type', clientType)
+      .eq('store_id', storeId)
     if (error) {
       console.error('Error fetching stores: ', error)
       return
@@ -29,11 +26,6 @@ const useClientList = (client_type: string) => {
       console.log(data)
     }
   }
-  useEffect(() => {
-    if (client_type) {
-      getClientList()
-    }
-  }, [supabase])
 
   return { setSelectedClient, selectedClient, clientList, getClientList }
 }

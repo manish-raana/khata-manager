@@ -35,20 +35,24 @@ import useClients from '@/store/hooks/useClients'
 import { useRecoilValue } from 'recoil'
 import { selectedStoresState } from '@/store/atoms/stores'
 
-export function AddNewClient({ clientType }: { clientType: string }) {
+export function AddNewClient({
+  clientType,
+}: {
+  clientType: 'CUSTOMER' | 'SUPPLIER' | 'EMPLOYEE'
+}) {
   const [loading, setLoading] = useState<boolean>(false)
   const [showNewStoreDialog, setShowNewStoreDialog] = useState(false)
   const { toast } = useToast()
   const supabase = createClient()
-  const { getClientList } = useClients(clientType)
   const selectedStore = useRecoilValue(selectedStoresState)
+  const { getClientList } = useClients()
 
   const form = useForm<AddClientFormType>({
     resolver: zodResolver(AddClientFormSchema),
     defaultValues: {
       name: '',
       phone: '',
-      client_type: CLIENT_TYPE_ENUM.Values.CUSTOMER,
+      client_type: clientType,
       address: '',
     },
   })
@@ -78,7 +82,7 @@ export function AddNewClient({ clientType }: { clientType: string }) {
       title: 'Success',
       description: 'Your store has been added successfully!',
     })
-    getClientList()
+    getClientList(clientType, selectedStore?.id!)
     handleModalClose()
     return storeResponse
   }
@@ -104,7 +108,7 @@ export function AddNewClient({ clientType }: { clientType: string }) {
           onClick={() => setShowNewStoreDialog(true)}
         >
           <Plus className="w-6 h-6" />
-          <span> Add New {clientType}</span>
+          <span> Add New {clientType.toLowerCase()}</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[625px]">
@@ -128,7 +132,7 @@ export function AddNewClient({ clientType }: { clientType: string }) {
                   <FormControl>
                     <Input
                       type="text"
-                      placeholder={`Enter ${clientType} name...`}
+                      placeholder={`Enter ${clientType.toLowerCase()} name...`}
                       {...field}
                     />
                   </FormControl>
@@ -158,7 +162,7 @@ export function AddNewClient({ clientType }: { clientType: string }) {
                   <FormControl>
                     <Input
                       type="text"
-                      placeholder={`Enter ${clientType} address...`}
+                      placeholder={`Enter ${clientType.toLocaleLowerCase()} address...`}
                       {...field}
                     />
                   </FormControl>
@@ -166,36 +170,7 @@ export function AddNewClient({ clientType }: { clientType: string }) {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="client_type"
-              render={({ field }) => (
-                <FormItem className="space-y-3">
-                  <FormLabel>Client Type</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="flex items-center gap-10"
-                    >
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="CUSTOMER" />
-                        </FormControl>
-                        <FormLabel className="font-normal">Customer</FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="SUPPLIER" />
-                        </FormControl>
-                        <FormLabel className="font-normal">Supplier</FormLabel>
-                      </FormItem>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+
             <div className="flex items-center space-x-4 pt-5">
               <Button
                 type="button"
@@ -208,7 +183,7 @@ export function AddNewClient({ clientType }: { clientType: string }) {
                 {loading && (
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                Create {clientType}
+                Create {clientType.toLowerCase()}
               </Button>
             </div>
           </form>
