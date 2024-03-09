@@ -1,6 +1,6 @@
 'use client'
 import { Input } from './ui/input';
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Button } from './ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { createClient } from '@/utils/supabase/client';
