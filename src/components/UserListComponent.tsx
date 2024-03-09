@@ -62,8 +62,10 @@ const UserListComponent = ({
   }, [memoizedGetClientList, clientType, selectedStore?.id!])
 
   const filteredClientList = useMemo(() => {
-    return clientList.filter((client) =>
-      client.name.toLowerCase().includes(searchQuery.toLowerCase())
+    return clientList.filter(
+      (client) =>
+        client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        client.phone.includes(searchQuery.toLowerCase())
     )
   }, [clientList, searchQuery])
 
