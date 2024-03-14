@@ -41,7 +41,7 @@ const useTxnsList = () => {
 
   useEffect(() => {
     const channels = supabase
-      .channel('custom-all-channel')
+      .channel('trasactions-channel')
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'transactions' },
@@ -61,6 +61,9 @@ const useTxnsList = () => {
       .subscribe()
     if (selectedClient) {
       getTxnsList()
+    }
+    return () => {
+      channels.unsubscribe()
     }
   }, [selectedClient, supabase])
 

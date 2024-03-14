@@ -97,7 +97,7 @@ const TransactionsList = () => {
         </div>
         <a
           className={cn(totalGave === totalGot && 'pointer-events-none')}
-          href="//api.whatsapp.com/send?phone=918077083351&text=WHATEVER_LINK_OR_TEXT_YOU_WANT_TO_SEND"
+          href={`//api.whatsapp.com/send?phone=${selectedClient.phone}&text=Hi ${selectedClient.name},%0A%0APayment of amount ₹${totalGave - totalGot} is pending for last settelement.%0A%0APlease make the payment as soon as possible.%0A%0AThanks,%0A${selectedClient.name}`}
           target="_blank"
         >
           {' '}
@@ -129,7 +129,7 @@ const TransactionsList = () => {
 
         <ScrollArea className="h-[600px] w-full rounded-md overflow-y-scroll">
           {txnsList.map((item: any) => (
-            <TxnRow item={item} />
+            <TxnRow key={item.id} item={item} />
           ))}
         </ScrollArea>
       </Card>

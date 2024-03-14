@@ -130,7 +130,6 @@ export function EditClient() {
                   <FormControl>
                     <Input
                       type="text"
-                      defaultValue={field.value}
                       placeholder={`Enter partner name...`}
                       {...field}
                     />

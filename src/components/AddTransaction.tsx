@@ -154,7 +154,6 @@ export function AddNewTransaction({
                   <FormControl>
                     <Input
                       type="number"
-                      defaultValue={field.value}
                       placeholder={`Enter amount...`}
                       {...field}
                       onChange={(event) =>

@@ -32,6 +32,7 @@ const UserListComponent = ({
   const supabase = createClient()
 
   const getClientList = async (_clientType: string, _storeId: number) => {
+    if (!_storeId) return
     setClientList([])
     console.log('fetching client list')
     const { data, error } = await supabase
@@ -81,7 +82,7 @@ const UserListComponent = ({
   }
   useEffect(() => {
     const channels = supabase
-      .channel('custom-all-channel')
+      .channel('clients-channel')
       .on(
         'postgres_changes',
         {
@@ -103,6 +104,9 @@ const UserListComponent = ({
         }
       )
       .subscribe()
+    return () => {
+      channels.unsubscribe()
+    }
   }, [supabase])
 
   useEffect(() => {
