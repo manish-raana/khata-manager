@@ -12,7 +12,7 @@ const useTxnsList = () => {
 
   const getTxnsList = async () => {
     setTxnsList([])
-    console.log('selectedClient', selectedClient)
+    //console.log('selectedClient', selectedClient)
     const { data, error } = await supabase
       .from('transactions')
       .select('*')
@@ -22,10 +22,10 @@ const useTxnsList = () => {
       console.error('Error fetching txns: ', error)
       return
     }
-    console.log(data)
+    //console.log(data)
     if (data && data.length > 0) {
       setTxnsList(data)
-      console.log(data)
+      //console.log(data)
     }
   }
 

@@ -27,7 +27,6 @@ const UserListComponent = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState('')
   const selectedStore = useRecoilValue(selectedStoresState)
-  const setSelectedClient = useSetRecoilState(selectedClientState)
   const [clientList, setClientList] = useRecoilState(clientListState)
 
   const supabase = createClient()
@@ -56,7 +55,56 @@ const UserListComponent = ({
     [clientType, selectedStore?.id!]
   )
 
+  const eventUpdateClient = (payload: any) => {
+    console.log('update event received!', payload)
+    console.log('clients', clientList)
+    setClientList((prev) => {
+      return prev.map((item) => {
+        if (item.id === payload.new.id) {
+          return payload.new // Replace the item with the updated payload
+        }
+        return item // Return unchanged items
+      })
+    })
+  }
+  const eventAddClient = (payload: any) => {
+    console.log('add event received!', payload)
+    setClientList((prev) => {
+      return [payload.new, ...prev]
+    })
+  }
+  const eventDeleteClient = (payload: any) => {
+    console.log('delete event received!', payload)
+    setClientList((prev) => {
+      return prev.filter((item) => item.id !== payload.old.id)
+    })
+  }
   useEffect(() => {
+    const channels = supabase
+      .channel('custom-all-channel')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'clients',
+          filter: 'client_type=eq.' + clientType,
+        },
+        (payload) => {
+          //console.log('Change received!', payload)
+          if (payload && payload.eventType === 'UPDATE') {
+            eventUpdateClient(payload)
+          }
+          if (payload && payload.eventType === 'INSERT') {
+            eventAddClient(payload)
+          }
+          if (payload && payload.eventType === 'DELETE') {
+            eventDeleteClient(payload)
+          }
+        }
+      )
+      .subscribe()
+
     memoizedGetClientList(clientType, selectedStore?.id!)
   }, [memoizedGetClientList, clientType, selectedStore?.id!])
 
@@ -105,7 +153,7 @@ const CardRow = ({ client }: { client: IClientType }) => {
       className={cn(
         'flex items-start justify-between px-5 py-3 w-full cursor-pointer text-sm',
         selectedClient?.id === client.id
-          ? 'bg-gray-400'
+          ? 'bg-purple-200'
           : 'even:bg-gray-50 even:dark:bg-gray-900 dark:text-white'
       )}
       onClick={(e) => setSelectedClient(client)}
@@ -125,18 +173,16 @@ const CardRow = ({ client }: { client: IClientType }) => {
       <p className={cn('w-full text-end flex flex-col')}>
         <span
           className={cn(
-            client.netBalance > 0 &&
-              client.txnType === 'give' &&
-              'text-red-500',
-            client.netBalance > 0 &&
-              client.txnType === 'get' &&
-              'text-green-500'
+            client.net_balance < 0 && 'text-red-600',
+            client.net_balance > 0 && 'text-green-600'
           )}
         >
-          ₹ {client.netBalance > 0 ? client.netBalance : '0.0'}
+          ₹ {client.net_balance || '0.0'}
         </span>
-        {client.netBalance > 0 && (
-          <span className="capitalize text-xs">You'll {client.txnType}</span>
+        {(client.net_balance > 0 || client.net_balance < 0) && (
+          <span className="capitalize text-xs">
+            {client.net_balance > 0 ? "You'll Give" : "You'll get"}
+          </span>
         )}
       </p>
     </div>

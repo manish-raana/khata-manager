@@ -19,7 +19,6 @@ const TransactionsList = () => {
 
   const columns = ['Date', 'Description', 'You Gave', 'You Got']
   const { txnsList, getTxnsList } = useTxnsList()
-  console.log('txnsList', txnsList)
 
   useEffect(() => {
     setTotalNet(0)
@@ -27,7 +26,6 @@ const TransactionsList = () => {
     setTotalGot(0)
 
     if (txnsList && txnsList.length > 0) {
-      console.log('txnsList', txnsList)
       let totalGave = 0
       let totalGot = 0
 

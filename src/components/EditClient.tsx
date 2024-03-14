@@ -37,7 +37,6 @@ export function EditClient() {
   const [deleting, setDeleting] = useState<boolean>(false)
   const [selectedClient, setSelectedClient] =
     useRecoilState(selectedClientState)
-  const { getClientList } = useClients('CUSTOMER')
   //console.log('selectedClient', selectedClient)
   const { toast } = useToast()
   const supabase = createClient()
@@ -61,7 +60,6 @@ export function EditClient() {
       .select()
     console.log('data', data)
     if (data) {
-      getClientList()
       setSelectedClient(data[0])
       toast({
         variant: 'success',
@@ -88,7 +86,6 @@ export function EditClient() {
         description: 'An error occurred while deleting client',
       })
     } else {
-      getClientList()
       setSelectedClient(null)
       handleCloseSheet()
       toast({

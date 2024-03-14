@@ -45,7 +45,6 @@ export function AddNewClient({
   const { toast } = useToast()
   const supabase = createClient()
   const selectedStore = useRecoilValue(selectedStoresState)
-  const { getClientList } = useClients()
 
   const form = useForm<AddClientFormType>({
     resolver: zodResolver(AddClientFormSchema),
@@ -82,7 +81,6 @@ export function AddNewClient({
       title: 'Success',
       description: 'Your store has been added successfully!',
     })
-    getClientList(clientType, selectedStore?.id!)
     handleModalClose()
     return storeResponse
   }
