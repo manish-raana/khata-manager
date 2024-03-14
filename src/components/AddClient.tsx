@@ -104,6 +104,7 @@ export function AddNewClient({
     <Dialog open={showNewStoreDialog}>
       <DialogTrigger asChild>
         <Button
+          variant={'outline'}
           className="space-x-2"
           onClick={() => setShowNewStoreDialog(true)}
         >

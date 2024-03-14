@@ -94,11 +94,15 @@ const TransactionsList = () => {
           <p>₹ {totalGot}</p>
         </div>
         <a
+          className={cn(totalGave === totalGot && 'pointer-events-none')}
           href="//api.whatsapp.com/send?phone=918077083351&text=WHATEVER_LINK_OR_TEXT_YOU_WANT_TO_SEND"
           target="_blank"
         >
           {' '}
-          <Button variant={'outline'}>
+          <Button
+            variant={'outline'}
+            className={cn(totalGave === totalGot && 'bg-zinc-100')}
+          >
             {' '}
             <img
               src="/whatsapp.png"
