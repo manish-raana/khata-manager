@@ -30,7 +30,7 @@ const TransactionsList = () => {
       let totalGot = 0
 
       // Loop through the transaction data
-      txnsList.forEach((transaction) => {
+      txnsList.forEach((transaction: any) => {
         if (transaction.txn_type === 'GAVE') {
           // If transaction type is "GAVE", add the amount to totalGave
           totalGave += transaction.amount

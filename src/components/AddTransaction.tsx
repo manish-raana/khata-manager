@@ -125,6 +125,14 @@ export function AddNewTransaction({
         </SheetHeader>
         <Form {...form}>
           <form
+            onKeyDown={(event) => {
+              // Prevent form submission when Enter key is pressed
+              if (event.key === 'Enter') {
+                console.log('Enter key pressed')
+                event.preventDefault()
+                form.handleSubmit(onSubmit)()
+              }
+            }}
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4 py-2 pb-4"
           >

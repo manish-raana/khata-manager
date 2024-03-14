@@ -1,12 +1,12 @@
 'use client'
 import { createClient } from '@/utils/supabase/client'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { txnsListState } from '../atoms/txns'
 import { selectedClientState } from '../atoms/clients'
 
 const useTxnsList = () => {
-  const [txnsList, setTxnsList] = useRecoilState(txnsListState)
+  const [txnsList, setTxnsList] = useState<any>([])
   const supabase = createClient()
   const selectedClient = useRecoilValue(selectedClientState)
 
