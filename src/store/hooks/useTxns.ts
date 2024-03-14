@@ -17,6 +17,7 @@ const useTxnsList = () => {
       .from('transactions')
       .select('*')
       .eq('client_id', `${selectedClient?.id!}`)
+      .order('date', { ascending: false })
     if (error) {
       console.error('Error fetching txns: ', error)
       return

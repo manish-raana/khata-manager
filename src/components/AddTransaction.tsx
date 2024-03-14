@@ -133,7 +133,16 @@ export function AddNewTransaction({
               name="amount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Amount</FormLabel>
+                  <FormLabel>
+                    Amount{' '}
+                    <span
+                      className={cn(
+                        txnType === 'GOT' ? 'text-green-500' : 'text-red-500'
+                      )}
+                    >
+                      You {txnType === 'GAVE' ? 'Gave' : 'Got'}
+                    </span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       type="number"

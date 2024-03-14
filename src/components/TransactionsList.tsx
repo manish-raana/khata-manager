@@ -22,6 +22,10 @@ const TransactionsList = () => {
   console.log('txnsList', txnsList)
 
   useEffect(() => {
+    setTotalNet(0)
+    setTotalGave(0)
+    setTotalGot(0)
+
     if (txnsList && txnsList.length > 0) {
       console.log('txnsList', txnsList)
       let totalGave = 0
@@ -125,18 +129,9 @@ const TransactionsList = () => {
           </div>
         )}
 
-        <ScrollArea className="h-[610px] w-full rounded-md border">
+        <ScrollArea className="h-[600px] w-full rounded-md overflow-y-scroll">
           {txnsList.map((item: any) => (
-            <div className="flex items-center justify-between px-5 py-3 w-full even:bg-gray-50 cursor-pointer text-sm">
-              <p className="w-full text-start">{formatDate(item.date)}</p>
-              <p className="w-full text-start">{item.description}</p>
-              <p className="w-full text-center text-red-500 pl-10">
-                {item.txn_type === 'GAVE' ? item.amount : '-'}
-              </p>
-              <p className="w-full text-end text-green-500">
-                {item.txn_type === 'GOT' ? item.amount : '-'}
-              </p>
-            </div>
+            <TxnRow item={item} />
           ))}
         </ScrollArea>
       </Card>
@@ -150,6 +145,20 @@ const TransactionsList = () => {
 
 export default TransactionsList
 
+const TxnRow = ({ item }: any) => {
+  return (
+    <div className="flex items-center justify-between px-5 py-3 w-full even:bg-gray-50 cursor-pointer text-sm">
+      <p className="w-full text-start">{formatDate(item.date)}</p>
+      <p className="w-full text-start">{item.description}</p>
+      <p className="w-full text-center text-red-500 pl-10">
+        {item.txn_type === 'GAVE' ? item.amount : '-'}
+      </p>
+      <p className="w-full text-end text-green-500">
+        {item.txn_type === 'GOT' ? item.amount : '-'}
+      </p>
+    </div>
+  )
+}
 const CardHeader = ({ columns }: { columns: any }) => {
   return (
     <div className="flex items-center justify-between px-5 py-2 bg-gray-200 dark:text-white rounded-t-md">
