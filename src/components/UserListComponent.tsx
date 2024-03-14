@@ -28,6 +28,12 @@ const UserListComponent = ({
   const [searchQuery, setSearchQuery] = useState('')
   const selectedStore = useRecoilValue(selectedStoresState)
   const [clientList, setClientList] = useRecoilState(clientListState)
+  const [selectedFilter, setSelectedFilter] = useState('all')
+
+  const handleFilterChange = (filterValue: any) => {
+    console.log('filterValue', filterValue)
+    setSelectedFilter(filterValue)
+  }
 
   const supabase = createClient()
 
@@ -68,6 +74,7 @@ const UserListComponent = ({
       })
     })
   }
+
   const addClientEvent = (payload: any) => {
     console.log('client add event received!', payload)
     setClientList((prev) => {
@@ -113,20 +120,42 @@ const UserListComponent = ({
     memoizedGetClientList(clientType, selectedStore?.id!)
   }, [memoizedGetClientList, clientType, selectedStore?.id!])
 
-  const filteredClientList = useMemo(() => {
+  /*  const filteredClientList = useMemo(() => {
     return clientList.filter(
       (client) =>
         client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         client.phone.includes(searchQuery.toLowerCase())
     )
-  }, [clientList, searchQuery])
+  }, [clientList, searchQuery]) */
+  // Filtered client list based on search query and selected filter
+  const filteredClientList = useMemo(() => {
+    console.log('selectedFilter', selectedFilter)
+    return clientList.filter((client) => {
+      // Filter by search query
+      const matchesSearchQuery =
+        client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        client.phone.includes(searchQuery.toLowerCase())
+
+      // Filter by selected filter
+      if (selectedFilter === 'all') {
+        return matchesSearchQuery
+      } else if (selectedFilter === 'give') {
+        return matchesSearchQuery && client.net_balance > 0
+      } else if (selectedFilter === 'get') {
+        return matchesSearchQuery && client.net_balance < 0
+      } else if (selectedFilter === 'settled') {
+        return matchesSearchQuery && client.net_balance === 0
+      }
+      return false
+    })
+  }, [clientList, searchQuery, selectedFilter])
 
   const columns = ['Name', 'Phone', 'NET Balance']
   return (
     <div className="flex flex-col space-y-4 w-full">
       <div className="flex items-center space-x-4">
         <ListSearch setSearchQuery={setSearchQuery} />
-        <ListFilter />
+        <ListFilter onFilterChange={handleFilterChange} />
       </div>
       <div className="bg-gray-100 rounded-md max-h-[690px] w-full p-0 dark:bg-black dark:text-white relative">
         <CardHeader columns={columns} />
@@ -211,15 +240,21 @@ const CardHeaderItem = ({ className, children }: any) => {
   const defaultClass = 'w-full text-start font-bold'
   return <p className={cn(defaultClass, className)}>{children}</p>
 }
-const ListFilter = () => {
+const ListFilter = ({ onFilterChange }: any) => {
   const [selectedFilter, setSelectedFilter] = useState('all')
+
+  const handleFilterChange = (value: any) => {
+    setSelectedFilter(value)
+    onFilterChange(value)
+  }
+
   useMemo(() => {
     console.log(selectedFilter)
   }, [selectedFilter])
   return (
     <div className="w-40">
       <Label>Filter By</Label>
-      <Select onValueChange={setSelectedFilter} defaultValue={selectedFilter}>
+      <Select onValueChange={handleFilterChange} defaultValue={selectedFilter}>
         <SelectTrigger>
           <SelectValue placeholder="Filter By" />
         </SelectTrigger>
