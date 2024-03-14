@@ -34,7 +34,7 @@ const UserListComponent = ({
   const getClientList = async (_clientType: string, _storeId: number) => {
     if (!_storeId) return
     setClientList([])
-    console.log('fetching client list')
+    //console.log('fetching client list')
     const { data, error } = await supabase
       .from('clients')
       .select('*')

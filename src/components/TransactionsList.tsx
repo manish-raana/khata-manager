@@ -96,14 +96,20 @@ const TransactionsList = () => {
           <p>₹ {totalGot}</p>
         </div>
         <a
-          className={cn(totalGave === totalGot && 'pointer-events-none')}
+          className={cn(
+            (totalGave === totalGot || totalGot > totalGave) &&
+              'pointer-events-none'
+          )}
           href={`//api.whatsapp.com/send?phone=${selectedClient.phone}&text=Hi ${selectedClient.name},%0A%0APayment of amount ₹${totalGave - totalGot} is pending for last settelement.%0A%0APlease make the payment as soon as possible.%0A%0AThanks,%0A${selectedClient.name}`}
           target="_blank"
         >
           {' '}
           <Button
             variant={'outline'}
-            className={cn(totalGave === totalGot && 'bg-zinc-100')}
+            className={cn(
+              (totalGave === totalGot || totalGot > totalGave) &&
+                'bg-zinc-100 pointer-events-none'
+            )}
           >
             {' '}
             <img

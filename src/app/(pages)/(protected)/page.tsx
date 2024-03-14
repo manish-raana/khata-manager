@@ -1,5 +1,4 @@
 import { Metadata } from 'next'
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -7,8 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { CalendarDateRangePicker } from '@/components/dashboard/date-range-picker'
+import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { Overview } from '@/components/dashboard/overview'
 import { RecentSales } from '@/components/dashboard/recent-sales'
 import { createClient } from '@/utils/supabase/server'
