@@ -321,13 +321,13 @@ export function EditTransaction({
                       Save Changes
                     </Button>
                   </div>
-                  <div className="absolute bottom-10 w-full">
+                  {/* <div className="absolute bottom-10 w-full">
                     <DeleteAlert
                       recordType="transaction"
                       handleDelete={handleDelete}
                       className="px-24"
                     />
-                  </div>
+                  </div> */}
                 </div>
               </SheetFooter>
             </div>
