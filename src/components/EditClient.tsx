@@ -28,8 +28,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { selectedClientState } from '@/store/atoms/clients'
 import { createClient } from '@/utils/supabase/client'
-import useClients from '@/store/hooks/useClients'
-import { useToast } from '@/components/ui/use-toast'
+import toast from 'react-hot-toast'
 
 export function EditClient() {
   const [showSheet, setShowSheet] = useState<boolean>(false)
@@ -38,7 +37,6 @@ export function EditClient() {
   const [selectedClient, setSelectedClient] =
     useRecoilState(selectedClientState)
   //console.log('selectedClient', selectedClient)
-  const { toast } = useToast()
   const supabase = createClient()
   const form = useForm<AddClientFormType>({
     resolver: zodResolver(AddClientFormSchema),
@@ -61,10 +59,9 @@ export function EditClient() {
     console.log('data', data)
     if (data) {
       setSelectedClient(data[0])
-      toast({
-        variant: 'success',
-        title: 'Success',
-        description: 'Client has been updated successfully!',
+      toast('Client updated successfully', {
+        icon: '🎉',
+        style: { background: '#22c55e', color: 'white' },
       })
     }
     console.log('error', error)
@@ -80,18 +77,16 @@ export function EditClient() {
       .eq('id', selectedClient?.id)
     if (error) {
       console.log('error', error)
-      toast({
-        variant: 'default',
-        title: 'Error deleting client',
-        description: 'An error occurred while deleting client',
+      toast('Error deleting client', {
+        icon: '❌',
+        style: { background: '#ef4444', color: 'white' },
       })
     } else {
       setSelectedClient(null)
       handleCloseSheet()
-      toast({
-        variant: 'success',
-        title: 'Success',
-        description: 'Client has been deleted successfully!',
+      toast('Client deleted successfully', {
+        icon: '🎉',
+        style: { background: '#22c55e', color: 'white' },
       })
     }
     setDeleting(false)

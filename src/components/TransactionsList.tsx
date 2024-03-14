@@ -1,6 +1,6 @@
 'use client'
 import { selectedClientState } from '@/store/atoms/clients'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { Card } from './ui/card'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
@@ -10,6 +10,7 @@ import useTxnsList from '@/store/hooks/useTxns'
 import { AddNewTransaction } from './AddTransaction'
 import { EditClient } from './EditClient'
 import { formatDate } from '@/utils/formatDate'
+import { EditTransaction } from './EditTxn'
 
 const TransactionsList = () => {
   const selectedClient = useRecoilValue(selectedClientState)
@@ -46,6 +47,20 @@ const TransactionsList = () => {
     }
   }, [txnsList])
 
+  const [selectedTxn, setSelectedTxn] = useState(null)
+  const [editTxn, setEditTxn] = useState(false)
+
+  const handleClick = (item: any) => {
+    console.log('clicked', item)
+    setSelectedTxn(item)
+    setEditTxn(true)
+  }
+
+  const handleEditReset = () => {
+    setEditTxn(false)
+    setSelectedTxn(null)
+  }
+
   if (selectedClient === null) {
     return (
       <div className="flex items-center justify-center w-full h-[800px]">
@@ -57,93 +72,115 @@ const TransactionsList = () => {
   }
 
   return (
-    <div className="flex flex-col space-y-4 w-full">
-      <div className="bg-gray-100 rounded-lg p-2 md:flex items-start justify-between dark:bg-black dark:text-white">
-        <div>
-          <p>
-            <b>Name:</b> {selectedClient?.name}
-          </p>
-          <p>
-            <b>Phone:</b> {selectedClient?.phone}
-          </p>
-        </div>
-        <p className="w-1/2">
-          <b>Address:</b> {selectedClient?.address}
-        </p>
-        <EditClient />
-      </div>
-      <div className="bg-gray-100 rounded-lg md:flex items-center justify-between p-2 dark:bg-black dark:text-white">
-        <div>
-          <p>Net Balance</p>
-          <p
-            className={cn(
-              totalNet === 0
-                ? 'text-black'
-                : totalGave > totalGot
-                  ? 'text-red-500'
-                  : 'text-green-500'
-            )}
-          >
-            ₹ {totalNet}
-          </p>
-        </div>
-        <div className="text-red-500">
-          <p>You Gave</p>
-          <p>₹ {totalGave}</p>
-        </div>
-        <div className="text-green-500">
-          <p>You Got</p>
-          <p>₹ {totalGot}</p>
-        </div>
-        <a
-          className={cn(
-            (totalGave === totalGot || totalGot > totalGave) &&
-              'pointer-events-none'
-          )}
-          href={`//api.whatsapp.com/send?phone=${selectedClient.phone}&text=Hi ${selectedClient.name},%0A%0APayment of amount ₹${totalGave - totalGot} is pending for last settelement.%0A%0APlease make the payment as soon as possible.%0A%0AThanks,%0A${selectedClient.name}`}
-          target="_blank"
-        >
-          {' '}
-          <Button
-            variant={'outline'}
-            className={cn(
-              (totalGave === totalGot || totalGot > totalGave) &&
-                'light:bg-zinc-100 dark:bg-zinc-900 pointer-events-none'
-            )}
-          >
-            {' '}
-            <img
-              src="/whatsapp.png"
-              className="w-6 bg-blend-screen mr-2"
-              alt=""
-            />
-            Send Reminders
-          </Button>
-        </a>
-      </div>
+    <>
+      {editTxn && (
+        <EditTransaction
+          selectedTxn={selectedTxn}
+          handleEditReset={handleEditReset}
+        />
+      )}
 
-      <Card className="bg-gray-100 rounded-md min-h-[500px] w-full p-0 dark:bg-black dark:text-white relative dark:border-black">
-        <CardHeader columns={columns} />
-
-        {txnsList.length === 0 && (
-          <div className="flex items-center justify-center h-96 absolute top-50 w-full">
-            <p className="text-center text-gray-500 mt-4 text-2xl">
-              No Data Available
+      <div className="flex flex-col space-y-4 w-full">
+        <div className="bg-gray-100 rounded-lg p-2 md:flex items-start justify-between dark:bg-black dark:text-white">
+          <div>
+            <p>
+              <b>Name:</b> {selectedClient?.name}
+            </p>
+            <p>
+              <b>Phone:</b> {selectedClient?.phone}
             </p>
           </div>
-        )}
+          <p className="w-1/2">
+            <b>Address:</b> {selectedClient?.address}
+          </p>
+          <EditClient />
+        </div>
+        <div className="bg-gray-100 rounded-lg md:flex items-center justify-between p-2 dark:bg-black dark:text-white">
+          <div>
+            <p>Net Balance</p>
+            <p
+              className={cn(
+                totalNet === 0
+                  ? 'light:text-black dark:text-white'
+                  : totalGave > totalGot
+                    ? 'text-red-500'
+                    : 'text-green-500'
+              )}
+            >
+              ₹ {totalNet}
+            </p>
+          </div>
+          <div className="text-red-500">
+            <p>You Gave</p>
+            <p>₹ {totalGave}</p>
+          </div>
+          <div className="text-green-500">
+            <p>You Got</p>
+            <p>₹ {totalGot}</p>
+          </div>
+          <a
+            className={cn(
+              (totalGave === totalGot || totalGot > totalGave) &&
+                'pointer-events-none'
+            )}
+            href={`//api.whatsapp.com/send?phone=${selectedClient.phone}&text=Hi ${selectedClient.name},%0A%0APayment of amount ₹${totalGave - totalGot} is pending for last settelement.%0A%0APlease make the payment as soon as possible.%0A%0AThanks,%0A${selectedClient.name}`}
+            target="_blank"
+          >
+            {' '}
+            <Button
+              variant={'outline'}
+              className={cn(
+                (totalGave === totalGot || totalGot > totalGave) &&
+                  'light:bg-zinc-100 dark:bg-zinc-900 pointer-events-none'
+              )}
+            >
+              {' '}
+              <img
+                src="/whatsapp.png"
+                className="w-6 bg-blend-screen mr-2"
+                alt=""
+              />
+              Send Reminders
+            </Button>
+          </a>
+        </div>
 
-        <ScrollArea className="h-[600px] w-full overflow-y-scroll">
-          {txnsList.map((item: any) => (
-            <TxnRow key={item.id} item={item} />
-          ))}
-        </ScrollArea>
-      </Card>
-      <div className="flex flex-col justify-start md:flex-row md:justify-center w-full md:space-x-12">
-        <AddNewTransaction txnType="GAVE" getTxnsList={getTxnsList} />
-        <AddNewTransaction txnType="GOT" getTxnsList={getTxnsList} />
+        <Card className="bg-gray-100 rounded-md min-h-[500px] w-full p-0 dark:bg-black dark:text-white relative dark:border-black">
+          <CardHeader columns={columns} />
+
+          {txnsList.length === 0 && (
+            <div className="flex items-center justify-center h-96 absolute top-50 w-full">
+              <p className="text-center text-gray-500 mt-4 text-2xl">
+                No Data Available
+              </p>
+            </div>
+          )}
+
+          <ScrollArea className="h-[600px] w-full overflow-y-scroll">
+            {txnsList.map((item: any) => (
+              <div
+                key={item.id}
+                onClick={() => handleClick(item)}
+                className="flex items-center justify-between px-5 py-3 w-full even:bg-zinc-200 dark:even:bg-zinc-800 cursor-pointer text-sm"
+              >
+                <p className="w-full text-start">{formatDate(item.date)}</p>
+                <p className="w-full text-center ">{item.description}</p>
+                <p className="w-full text-center text-red-500 pl-10">
+                  {item.txn_type === 'GAVE' ? item.amount : '-'}
+                </p>
+                <p className="w-full text-end text-green-500">
+                  {item.txn_type === 'GOT' ? item.amount : '-'}
+                </p>
+              </div>
+            ))}
+          </ScrollArea>
+        </Card>
+        <div className="flex flex-col justify-start md:flex-row md:justify-center w-full md:space-x-12">
+          <AddNewTransaction txnType="GAVE" getTxnsList={getTxnsList} />
+          <AddNewTransaction txnType="GOT" getTxnsList={getTxnsList} />
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
@@ -151,16 +188,18 @@ export default TransactionsList
 
 const TxnRow = ({ item }: any) => {
   return (
-    <div className="flex items-center justify-between px-5 py-3 w-full light:even:bg-zinc-200 dark:odd:bg-zinc-800 cursor-pointer text-sm">
-      <p className="w-full text-start">{formatDate(item.date)}</p>
-      <p className="w-full text-start">{item.description}</p>
-      <p className="w-full text-center text-red-500 pl-10">
-        {item.txn_type === 'GAVE' ? item.amount : '-'}
-      </p>
-      <p className="w-full text-end text-green-500">
-        {item.txn_type === 'GOT' ? item.amount : '-'}
-      </p>
-    </div>
+    <>
+      <div className="flex items-center justify-between px-5 py-3 w-full even:bg-zinc-200 dark:even:bg-zinc-800 cursor-pointer text-sm">
+        <p className="w-full text-start">{formatDate(item.date)}</p>
+        <p className="w-full text-start">{item.description}</p>
+        <p className="w-full text-center text-red-500 pl-10">
+          {item.txn_type === 'GAVE' ? item.amount : '-'}
+        </p>
+        <p className="w-full text-end text-green-500">
+          {item.txn_type === 'GOT' ? item.amount : '-'}
+        </p>
+      </div>
+    </>
   )
 }
 const CardHeader = ({ columns }: { columns: any }) => {

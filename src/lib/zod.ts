@@ -46,5 +46,6 @@ export const AddTxnFormSchema = z.object({
   description: z.string().optional(),
   date: z.date(),
   file: z.string().optional(),
+  txn_type: z.enum(['GAVE', 'GOT']).optional(),
 })
 export type AddTxnFormType = z.infer<typeof AddTxnFormSchema>

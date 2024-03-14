@@ -34,9 +34,20 @@ const useTxnsList = () => {
   }
   const updateTxnEvent = (payload: any) => {
     console.log('updateTxnEvent', payload)
+    setTxnsList((prev: any) => {
+      return prev.map((txn: any) => {
+        if (txn.id === payload.new.id) {
+          return payload.new // Replace the item with the updated payload
+        }
+        return txn // Return unchanged items
+      })
+    })
   }
   const deleteTxnEvent = (payload: any) => {
     console.log('deleteTxnEvent', payload)
+    setTxnsList((prev: any) => {
+      return prev.filter((txn: any) => txn.id !== payload.old.id)
+    })
   }
 
   useEffect(() => {
