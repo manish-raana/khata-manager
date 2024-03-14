@@ -20,11 +20,17 @@ const Header = async () => {
     console.error(storeError)
   }
   return (
-    <div className="border-b">
-      <div className="hidden md:flex h-16 items-center px-4">
-        <StoreSwitcher storeData={storeData ? storeData : []} />
-        <MainNav className="mx-6" />
-        <div className="ml-auto flex items-center space-x-4">
+    <div className="border-b py-4 pb-10 md:p-0">
+      <div className="md:flex h-16 items-center justify-between px-2 md:px-4">
+        <div className="flex items-center justify-between">
+          <StoreSwitcher storeData={storeData ? storeData : []} />
+          <div className="md:hidden flex items-center space-x-6 pr-4">
+            <ThemeModeToggle />
+            <UserNav />
+          </div>
+        </div>
+        <MainNav className="mx-6 mt-5 md:mt-0" />
+        <div className="ml-auto hidden md:flex items-center justify-center space-x-4">
           {/*  <Search /> */}
           <ThemeModeToggle />
           <UserNav />

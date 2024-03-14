@@ -1,7 +1,7 @@
 {
   "WillLuke.nextjs.hasPrompted": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   // Add those two lines:
   "editor.formatOnSave": true, // Tell VSCode to format files on save

@@ -1,12 +1,11 @@
 'use client'
 import { selectedClientState } from '@/store/atoms/clients'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useRecoilValue } from 'recoil'
 import { Card } from './ui/card'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
-import { Settings } from 'lucide-react'
 import useTxnsList from '@/store/hooks/useTxns'
 import { AddNewTransaction } from './AddTransaction'
 import { EditClient } from './EditClient'
@@ -29,7 +28,7 @@ const TransactionsList = () => {
 
   return (
     <div className="flex flex-col space-y-4 w-full">
-      <div className="bg-gray-100 rounded-lg p-2 flex items-start justify-between dark:bg-black dark:text-white">
+      <div className="bg-gray-100 rounded-lg p-2 md:flex items-start justify-between dark:bg-black dark:text-white">
         <div>
           <p>
             <b>Name:</b> {selectedClient?.name}
@@ -43,7 +42,7 @@ const TransactionsList = () => {
         </p>
         <EditClient />
       </div>
-      <div className="bg-gray-100 rounded-lg flex items-center justify-between p-2 dark:bg-black dark:text-white">
+      <div className="bg-gray-100 rounded-lg md:flex items-center justify-between p-2 dark:bg-black dark:text-white">
         <div>
           <p>Net Balance</p>
           <p>₹ 50000</p>
@@ -85,7 +84,7 @@ const TransactionsList = () => {
           ))}
         </ScrollArea>
       </Card>
-      <div className="flex justify-center w-full space-x-12">
+      <div className="flex flex-col justify-start md:flex-row md:justify-center w-full md:space-x-12">
         <AddNewTransaction txnType="GAVE" getTxnsList={getTxnsList} />
         <AddNewTransaction txnType="GOT" getTxnsList={getTxnsList} />
       </div>
