@@ -4,7 +4,7 @@ import { ThemeProvider } from '@/components/theme/theme-provider'
 import RecoilRootWrapper from '@/wrappers/RecoilRootWrapper'
 import './globals.css'
 import 'react-phone-number-input/style.css'
-import { Toaster } from '@/components/ui/toaster'
+import { Toaster } from 'react-hot-toast'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {

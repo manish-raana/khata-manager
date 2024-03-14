@@ -15,13 +15,12 @@ import {
 } from '@/components/ui/form'
 import { AddStoreFormSchema, AddStoreFormType } from '@/lib/zod'
 import { Icons } from './ui/icons'
-import { useToast } from '@/components/ui/use-toast'
+import toast from 'react-hot-toast'
 import { useSetRecoilState } from 'recoil'
 import { storesListState } from '@/store/atoms/stores'
 
 const AddStore = ({ setShowNewStoreDialog }: any) => {
   const [loading, setLoading] = useState<boolean>(false)
-  const { toast }: { toast: any } = useToast()
   const supabase = createClient()
   const setStoreList = useSetRecoilState(storesListState)
 
@@ -40,17 +39,15 @@ const AddStore = ({ setShowNewStoreDialog }: any) => {
       .select()
     if (storeError) {
       console.error('Error adding store: ', storeError)
-      toast({
-        variant: 'default',
-        title: 'Error adding store',
-        description: 'An error occurred while adding store address',
+      toast('Error adding store', {
+        icon: '❌',
+        style: { background: '#ef4444', color: 'white' },
       })
       return
     }
-    toast({
-      variant: 'success',
-      title: 'Success',
-      description: 'Your store has been added successfully!',
+    toast('Store added successfully', {
+      icon: '🎉',
+      style: { background: '#22c55e', color: 'white' },
     })
     setStoreList((prev) => {
       return prev.concat(storeResponse)
@@ -65,15 +62,14 @@ const AddStore = ({ setShowNewStoreDialog }: any) => {
       .select('*')
       .ilike('name', `%${values.name}%`)
     if (stores && stores.length > 0) {
-      toast({
-        variant: 'destructive',
-        title: 'Error: Duplicate store name',
-        description: 'Store with this name already exists!',
+      toast('Store already exists', {
+        icon: '❌',
+        style: { background: '#ef4444', color: 'white' },
       })
       setLoading(false)
       return
     }
-    const storeResponse = await addStore(values)
+    await addStore(values)
     setShowNewStoreDialog(false)
 
     setLoading(false)

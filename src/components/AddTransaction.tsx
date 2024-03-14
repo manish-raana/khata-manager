@@ -14,7 +14,7 @@ import {
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { useToast } from './ui/use-toast'
+import toast from 'react-hot-toast'
 import { createClient } from '@/utils/supabase/client'
 import { selectedClientState } from '@/store/atoms/clients'
 import { useRecoilState } from 'recoil'
@@ -48,7 +48,6 @@ export function AddNewTransaction({
   const [selectedClient, setSelectedClient] =
     useRecoilState(selectedClientState)
 
-  const { toast } = useToast()
   const supabase = createClient()
   const form = useForm<AddTxnFormType>({
     resolver: zodResolver(AddTxnFormSchema),
@@ -78,20 +77,18 @@ export function AddNewTransaction({
       .select()
     setLoading(false)
     if (data) {
-      toast({
-        variant: 'success',
-        title: 'Transaction Added',
-        description: `Transaction Added successfully!`,
+      toast('Transaction added successfully', {
+        icon: '🎉',
+        style: { background: '#22c55e', color: 'white' },
       })
       console.log('data', data)
       getTxnsList()
       form.reset()
       setShowSheet(false)
     } else {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: `Error while adding transaction!`,
+      toast('Error adding transaction', {
+        icon: '❌',
+        style: { background: '#ef4444', color: 'white' },
       })
     }
   }
@@ -116,7 +113,7 @@ export function AddNewTransaction({
           variant="outline"
           onClick={() => setShowSheet(true)}
         >
-          {txnType === 'GOT' ? 'Add Gave' : 'Add Got'}
+          {txnType === 'GAVE' ? 'You Gave' : 'You Got'}
         </Button>
       </SheetTrigger>
       <SheetContent>

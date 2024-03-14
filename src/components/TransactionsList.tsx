@@ -1,6 +1,6 @@
 'use client'
 import { selectedClientState } from '@/store/atoms/clients'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useRecoilValue } from 'recoil'
 import { Card } from './ui/card'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
@@ -13,9 +13,37 @@ import { formatDate } from '@/utils/formatDate'
 
 const TransactionsList = () => {
   const selectedClient = useRecoilValue(selectedClientState)
+  const [totalNet, setTotalNet] = React.useState(0)
+  const [totalGave, setTotalGave] = React.useState(0)
+  const [totalGot, setTotalGot] = React.useState(0)
+
   const columns = ['Date', 'Description', 'You Gave', 'You Got']
   const { txnsList, getTxnsList } = useTxnsList()
   console.log('txnsList', txnsList)
+
+  useEffect(() => {
+    if (txnsList && txnsList.length > 0) {
+      console.log('txnsList', txnsList)
+      let totalGave = 0
+      let totalGot = 0
+
+      // Loop through the transaction data
+      txnsList.forEach((transaction) => {
+        if (transaction.txn_type === 'GAVE') {
+          // If transaction type is "GAVE", add the amount to totalGave
+          totalGave += transaction.amount
+        } else if (transaction.txn_type === 'GOT') {
+          // If transaction type is "GOT", add the amount to totalGot
+          totalGot += transaction.amount
+        }
+      })
+      setTotalGave(totalGave)
+      setTotalGot(totalGot)
+      const totalNet = totalGot - totalGave
+      setTotalNet(totalNet)
+    }
+  }, [txnsList])
+
   if (selectedClient === null) {
     return (
       <div className="flex items-center justify-center w-full h-[800px]">
@@ -45,17 +73,41 @@ const TransactionsList = () => {
       <div className="bg-gray-100 rounded-lg md:flex items-center justify-between p-2 dark:bg-black dark:text-white">
         <div>
           <p>Net Balance</p>
-          <p>₹ 50000</p>
+          <p
+            className={cn(
+              totalNet === 0
+                ? 'text-black'
+                : totalGave > totalGot
+                  ? 'text-red-500'
+                  : 'text-green-500'
+            )}
+          >
+            ₹ {totalNet}
+          </p>
         </div>
         <div className="text-red-500">
           <p>You Gave</p>
-          <p>₹ 50000</p>
+          <p>₹ {totalGave}</p>
         </div>
         <div className="text-green-500">
           <p>You Got</p>
-          <p>₹ 50000</p>
+          <p>₹ {totalGot}</p>
         </div>
-        <Button>Send Reminders</Button>
+        <a
+          href="//api.whatsapp.com/send?phone=918077083351&text=WHATEVER_LINK_OR_TEXT_YOU_WANT_TO_SEND"
+          target="_blank"
+        >
+          {' '}
+          <Button variant={'outline'}>
+            {' '}
+            <img
+              src="/whatsapp.png"
+              className="w-6 bg-blend-screen mr-2"
+              alt=""
+            />
+            Send Reminders
+          </Button>
+        </a>
       </div>
 
       <Card className="bg-gray-100 rounded-md min-h-[500px] w-full p-0 dark:bg-black dark:text-white relative">
