@@ -1,8 +1,7 @@
 'use client'
 import { createClient } from '@/utils/supabase/client'
 import { useEffect, useState } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { txnsListState } from '../atoms/txns'
+import { useRecoilValue } from 'recoil'
 import { selectedClientState } from '../atoms/clients'
 
 const useTxnsList = () => {
@@ -29,7 +28,37 @@ const useTxnsList = () => {
     }
   }
 
+  const addTxnEvent = (payload: any) => {
+    console.log('addTxnEvent', payload)
+    setTxnsList((prev: any) => [payload.new, ...prev])
+  }
+  const updateTxnEvent = (payload: any) => {
+    console.log('updateTxnEvent', payload)
+  }
+  const deleteTxnEvent = (payload: any) => {
+    console.log('deleteTxnEvent', payload)
+  }
+
   useEffect(() => {
+    const channels = supabase
+      .channel('custom-all-channel')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'transactions' },
+        (payload) => {
+          console.log('Change received!', payload)
+          if (payload.eventType === 'INSERT') {
+            addTxnEvent(payload)
+          }
+          if (payload.eventType === 'UPDATE') {
+            updateTxnEvent(payload)
+          }
+          if (payload.eventType === 'DELETE') {
+            deleteTxnEvent(payload)
+          }
+        }
+      )
+      .subscribe()
     if (selectedClient) {
       getTxnsList()
     }

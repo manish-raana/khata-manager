@@ -82,7 +82,7 @@ export function AddNewTransaction({
         style: { background: '#22c55e', color: 'white' },
       })
       console.log('data', data)
-      getTxnsList()
+      //getTxnsList()
       form.reset()
       setShowSheet(false)
     } else {
@@ -175,7 +175,7 @@ export function AddNewTransaction({
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Textarea
-                      defaultValue={field.value}
+                      //defaultValue={field.value}
                       placeholder={`Enter description...`}
                       {...field}
                     />
@@ -189,7 +189,7 @@ export function AddNewTransaction({
               name="date"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Date of birth</FormLabel>
+                  <FormLabel>Date of Payment</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>

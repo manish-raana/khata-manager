@@ -55,8 +55,8 @@ const UserListComponent = ({
     [clientType, selectedStore?.id!]
   )
 
-  const eventUpdateClient = (payload: any) => {
-    console.log('update event received!', payload)
+  const updateClientEvent = (payload: any) => {
+    console.log('client update event received!', payload)
     console.log('clients', clientList)
     setClientList((prev) => {
       return prev.map((item) => {
@@ -67,14 +67,14 @@ const UserListComponent = ({
       })
     })
   }
-  const eventAddClient = (payload: any) => {
-    console.log('add event received!', payload)
+  const addClientEvent = (payload: any) => {
+    console.log('client add event received!', payload)
     setClientList((prev) => {
       return [payload.new, ...prev]
     })
   }
-  const eventDeleteClient = (payload: any) => {
-    console.log('delete event received!', payload)
+  const deleteClientEvent = (payload: any) => {
+    console.log('client delete event received!', payload)
     setClientList((prev) => {
       return prev.filter((item) => item.id !== payload.old.id)
     })
@@ -88,23 +88,24 @@ const UserListComponent = ({
           event: '*',
           schema: 'public',
           table: 'clients',
-          filter: 'client_type=eq.' + clientType,
         },
         (payload) => {
-          //console.log('Change received!', payload)
+          console.log('client Change received!', payload)
           if (payload && payload.eventType === 'UPDATE') {
-            eventUpdateClient(payload)
+            updateClientEvent(payload)
           }
           if (payload && payload.eventType === 'INSERT') {
-            eventAddClient(payload)
+            addClientEvent(payload)
           }
           if (payload && payload.eventType === 'DELETE') {
-            eventDeleteClient(payload)
+            deleteClientEvent(payload)
           }
         }
       )
       .subscribe()
+  }, [supabase])
 
+  useEffect(() => {
     memoizedGetClientList(clientType, selectedStore?.id!)
   }, [memoizedGetClientList, clientType, selectedStore?.id!])
 

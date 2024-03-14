@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import { atom } from "recoil";
+import { atom } from 'recoil'
 
 export const txnsListState = atom<any[]>({
-  key: "txnsListState",
+  key: 'txnsListState',
   default: [],
-});
+})
