@@ -137,7 +137,7 @@ const UserListComponent = ({
             </p>
           </div>
         )}
-        <ScrollArea className="h-[600px] w-full  border">
+        <ScrollArea className="h-[600px] w-full">
           {filteredClientList.map((item: IClientType) => (
             <CardRow key={item.id} client={item} />
           ))}
@@ -158,8 +158,8 @@ const CardRow = ({ client }: { client: IClientType }) => {
       className={cn(
         'flex items-start justify-between px-5 py-3 w-full cursor-pointer text-sm',
         selectedClient?.id === client.id
-          ? 'bg-purple-200'
-          : 'even:bg-gray-50 even:dark:bg-gray-900 dark:text-white'
+          ? 'bg-purple-200 dark:bg-neutral-500'
+          : 'odd:bg-gray-50 odd:dark:bg-zinc-900 dark:text-white'
       )}
       onClick={(e) => setSelectedClient(client)}
     >
@@ -195,7 +195,7 @@ const CardRow = ({ client }: { client: IClientType }) => {
 }
 const CardHeader = ({ columns }: { columns: any }) => {
   return (
-    <div className="flex items-center justify-between px-5 py-2 bg-gray-200 light:text-black rounded-t-md">
+    <div className="flex items-center justify-between px-5 py-2 bg-gray-200 light:text-black rounded-t-md dark:bg-black">
       {columns.map((item: any, index: any) => (
         <CardHeaderItem
           key={index}

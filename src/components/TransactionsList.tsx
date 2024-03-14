@@ -108,7 +108,7 @@ const TransactionsList = () => {
             variant={'outline'}
             className={cn(
               (totalGave === totalGot || totalGot > totalGave) &&
-                'bg-zinc-100 pointer-events-none'
+                'light:bg-zinc-100 dark:bg-zinc-900 pointer-events-none'
             )}
           >
             {' '}
@@ -122,7 +122,7 @@ const TransactionsList = () => {
         </a>
       </div>
 
-      <Card className="bg-gray-100 rounded-md min-h-[500px] w-full p-0 dark:bg-black dark:text-white relative">
+      <Card className="bg-gray-100 rounded-md min-h-[500px] w-full p-0 dark:bg-black dark:text-white relative dark:border-black">
         <CardHeader columns={columns} />
 
         {txnsList.length === 0 && (
@@ -133,7 +133,7 @@ const TransactionsList = () => {
           </div>
         )}
 
-        <ScrollArea className="h-[600px] w-full rounded-md overflow-y-scroll">
+        <ScrollArea className="h-[600px] w-full overflow-y-scroll">
           {txnsList.map((item: any) => (
             <TxnRow key={item.id} item={item} />
           ))}
@@ -151,7 +151,7 @@ export default TransactionsList
 
 const TxnRow = ({ item }: any) => {
   return (
-    <div className="flex items-center justify-between px-5 py-3 w-full even:bg-gray-50 cursor-pointer text-sm">
+    <div className="flex items-center justify-between px-5 py-3 w-full light:even:bg-zinc-200 dark:odd:bg-zinc-800 cursor-pointer text-sm">
       <p className="w-full text-start">{formatDate(item.date)}</p>
       <p className="w-full text-start">{item.description}</p>
       <p className="w-full text-center text-red-500 pl-10">
@@ -165,7 +165,7 @@ const TxnRow = ({ item }: any) => {
 }
 const CardHeader = ({ columns }: { columns: any }) => {
   return (
-    <div className="flex items-center justify-between px-5 py-2 bg-gray-200 dark:text-white rounded-t-md">
+    <div className="flex items-center justify-between px-5 py-2 bg-gray-200 dark:bg-black dark:text-white rounded-t-md">
       {columns.map((item: any, index: any) => (
         <CardHeaderItem key={index} className="first:text-start last:text-end">
           {item}
