@@ -31,7 +31,7 @@ const UserListComponent = ({
   const [selectedFilter, setSelectedFilter] = useState('all')
 
   const handleFilterChange = (filterValue: any) => {
-    console.log('filterValue', filterValue)
+    //console.log('filterValue', filterValue)
     setSelectedFilter(filterValue)
   }
 
@@ -63,8 +63,8 @@ const UserListComponent = ({
   )
 
   const updateClientEvent = (payload: any) => {
-    console.log('client update event received!', payload)
-    console.log('clients', clientList)
+    //console.log('client update event received!', payload)
+    //console.log('clients', clientList)
     setClientList((prev) => {
       return prev.map((item) => {
         if (item.id === payload.new.id) {
@@ -76,13 +76,13 @@ const UserListComponent = ({
   }
 
   const addClientEvent = (payload: any) => {
-    console.log('client add event received!', payload)
+    //console.log('client add event received!', payload)
     setClientList((prev) => {
       return [payload.new, ...prev]
     })
   }
   const deleteClientEvent = (payload: any) => {
-    console.log('client delete event received!', payload)
+    //console.log('client delete event received!', payload)
     setClientList((prev) => {
       return prev.filter((item) => item.id !== payload.old.id)
     })
@@ -98,7 +98,7 @@ const UserListComponent = ({
           table: 'clients',
         },
         (payload) => {
-          console.log('client Change received!', payload)
+          //console.log('client Change received!', payload)
           if (payload && payload.eventType === 'UPDATE') {
             updateClientEvent(payload)
           }
@@ -129,7 +129,7 @@ const UserListComponent = ({
   }, [clientList, searchQuery]) */
   // Filtered client list based on search query and selected filter
   const filteredClientList = useMemo(() => {
-    console.log('selectedFilter', selectedFilter)
+    //console.log('selectedFilter', selectedFilter)
     return clientList.filter((client) => {
       // Filter by search query
       const matchesSearchQuery =
