@@ -10,14 +10,10 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Plus } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useToast } from './ui/use-toast'
 import { createClient } from '@/utils/supabase/client'
-import {
-  AddClientFormSchema,
-  AddClientFormType,
-  CLIENT_TYPE_ENUM,
-} from '@/lib/zod'
+import { AddClientFormSchema, AddClientFormType } from '@/lib/zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -29,9 +25,7 @@ import {
   FormMessage,
 } from './ui/form'
 import { Icons } from './ui/icons'
-import { RadioGroup, RadioGroupItem } from './ui/radio-group'
 import { PhoneInput } from '@/components/ui/phone-input'
-import useClients from '@/store/hooks/useClients'
 import { useRecoilValue } from 'recoil'
 import { selectedStoresState } from '@/store/atoms/stores'
 import { useMediaQuery } from '@uidotdev/usehooks'
@@ -52,11 +46,26 @@ export function AddNewClient({
   clientType: 'CUSTOMER' | 'SUPPLIER' | 'EMPLOYEE'
 }) {
   const [showNewStoreDialog, setShowNewStoreDialog] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
-  const isDesktop = useMediaQuery('(min-width: 768px)')
-  if (isDesktop) {
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 768px)')
+    const updateIsMobile = () => {
+      setIsMobile(mediaQuery.matches)
+    }
+
+    updateIsMobile() // Initial check
+    mediaQuery.addListener(updateIsMobile) // Listen for changes
+
+    // Cleanup function
+    return () => {
+      mediaQuery.removeListener(updateIsMobile)
+    }
+  }, [])
+  //const isDesktop = useMediaQuery('(min-width: 768px)')
+  if (!isMobile) {
     return (
-      <Dialog open={showNewStoreDialog}>
+      <Dialog open={showNewStoreDialog} onOpenChange={setShowNewStoreDialog}>
         <DialogTrigger asChild>
           <Button
             variant={'outline'}
