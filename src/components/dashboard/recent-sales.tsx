@@ -14,7 +14,7 @@ export function RecentSales() {
       .select(`*, clients( name, client_type, phone )`)
       .limit(5)
       .order('created_at', { ascending: false })
-    console.log('transactions: ', data)
+    //console.log('transactions: ', data)
     setTransactionsList(data)
   }
   useEffect(() => {
