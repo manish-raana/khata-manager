@@ -1,19 +1,26 @@
-import { CalendarDateRangePicker } from '@/components/dashboard/date-range-picker';
-import { Button } from '@/components/ui/button';
+import { AddNewClient } from '@/components/AddClient'
+import TransactionsList from '@/components/TransactionsList'
+import UserListComponent from '@/components/UserListComponent'
 import React from 'react'
 
-const EmployeePage = () => {
+export default function EmployeePage() {
   return (
-    <div className="flex-1 space-y-4 p-8 pt-6">
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Employees</h2>
-        <div className="flex items-center space-x-2">
-          <CalendarDateRangePicker />
-          <Button>Download</Button>
+    <div className="flex-1 space-y-4 p-8 pt-6 md:px-24">
+      <div className="md:flex justify-between items-start mt-0 gap-4 w-full">
+        <div className="md:w-[48%] w-full space-y-10">
+          <div className="flex items-center justify-between w-full">
+            <h2 className="text-xl md:text-3xl font-bold tracking-tight">
+              Employees
+            </h2>
+            <AddNewClient clientType={'EMPLOYEE'} />
+          </div>
+
+          <UserListComponent clientType={'EMPLOYEE'} />
+        </div>
+        <div className="md:w-[48%] w-full">
+          <TransactionsList />
         </div>
       </div>
     </div>
-  );
+  )
 }
-
-export default EmployeePage

@@ -118,31 +118,33 @@ const TransactionsList = () => {
             <p>You Got</p>
             <p>₹ {totalGot}</p>
           </div>
-          <a
-            className={cn(
-              (totalGave === totalGot || totalGot > totalGave) &&
-                'pointer-events-none'
-            )}
-            href={`//api.whatsapp.com/send?phone=${selectedClient.phone}&text=Hi ${selectedClient.name},%0A%0APayment of amount ₹${totalGave - totalGot} is pending for last settelement.%0A%0APlease make the payment as soon as possible.%0A%0AThanks,%0A${selectedClient.name}`}
-            target="_blank"
-          >
-            {' '}
-            <Button
-              variant={'outline'}
+          {selectedClient.client_type !== 'EMPLOYEE' && (
+            <a
               className={cn(
                 (totalGave === totalGot || totalGot > totalGave) &&
-                  'light:bg-zinc-100 dark:bg-zinc-900 pointer-events-none'
+                  'pointer-events-none'
               )}
+              href={`//api.whatsapp.com/send?phone=${selectedClient.phone}&text=Hi ${selectedClient.name},%0A%0APayment of amount ₹${totalGave - totalGot} is pending for last settelement.%0A%0APlease make the payment as soon as possible.%0A%0AThanks,%0A${selectedClient.name}`}
+              target="_blank"
             >
               {' '}
-              <img
-                src="/whatsapp.png"
-                className="w-6 bg-blend-screen mr-2"
-                alt=""
-              />
-              Send Reminders
-            </Button>
-          </a>
+              <Button
+                variant={'outline'}
+                className={cn(
+                  (totalGave === totalGot || totalGot > totalGave) &&
+                    'light:bg-zinc-100 dark:bg-zinc-900 pointer-events-none'
+                )}
+              >
+                {' '}
+                <img
+                  src="/whatsapp.png"
+                  className="w-6 bg-blend-screen mr-2"
+                  alt=""
+                />
+                Send Reminders
+              </Button>
+            </a>
+          )}
         </div>
 
         <Card className="bg-gray-100 rounded-md min-h-[500px] w-full p-0 dark:bg-black dark:text-white relative dark:border-black">

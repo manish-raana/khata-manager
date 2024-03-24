@@ -23,7 +23,7 @@ import { createClient } from '@/utils/supabase/client'
 const UserListComponent = ({
   clientType,
 }: {
-  clientType: 'SUPPLIER' | 'CUSTOMER'
+  clientType: 'SUPPLIER' | 'CUSTOMER' | 'EMPLOYEE'
 }) => {
   const [searchQuery, setSearchQuery] = useState('')
   const selectedStore = useRecoilValue(selectedStoresState)
@@ -154,7 +154,7 @@ const UserListComponent = ({
   return (
     <div className="flex flex-col space-y-4 w-full">
       <div className="flex items-center space-x-4">
-        <ListSearch setSearchQuery={setSearchQuery} />
+        <ListSearch clientType={clientType} setSearchQuery={setSearchQuery} />
         <ListFilter onFilterChange={handleFilterChange} />
       </div>
       <div className="bg-gray-100 rounded-md max-h-[690px] w-full p-0 dark:bg-black dark:text-white relative">
@@ -276,13 +276,20 @@ const ListFilter = ({ onFilterChange }: any) => {
     </div>
   )
 }
-const ListSearch = ({ setSearchQuery }: any) => {
+const ListSearch = ({ clientType, setSearchQuery }: any) => {
   const handleSearchChange = (event: any) => {
     setSearchQuery(event.target.value)
   }
   return (
     <div className="w-full">
-      <Label>Search for customers</Label>
+      <Label>
+        Search for{' '}
+        {clientType === 'CUSTOMER'
+          ? 'Customer'
+          : clientType === 'SUPPLIER'
+            ? 'Supplier'
+            : 'Employee'}
+      </Label>
       <div className="relative">
         <Search className="absolute left-2 top-3 h-4 w-4 text-muted-foreground" />
         <Input
