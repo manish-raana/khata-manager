@@ -11,6 +11,7 @@ import { AddNewTransaction } from './AddTransaction'
 import { EditClient } from './EditClient'
 import { formatDate } from '@/utils/formatDate'
 import { EditTransaction } from './EditTxn'
+import useSalaryPayouts from '@/store/hooks/useSalaryPayouts'
 
 const TransactionsList = () => {
   const selectedClient = useRecoilValue(selectedClientState)
@@ -20,6 +21,10 @@ const TransactionsList = () => {
 
   const columns = ['Date', 'Description', 'You Gave', 'You Got']
   const { txnsList, getTxnsList } = useTxnsList()
+  /* const { txnsList: monthlyTxnList, getTxnsList: getMonthlyTxnList } =
+    useSalaryPayouts()
+
+  console.log('monthlyTxnList: ', monthlyTxnList) */
 
   useEffect(() => {
     setTotalNet(0)
