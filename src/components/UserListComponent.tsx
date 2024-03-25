@@ -213,7 +213,9 @@ const CardRow = ({
       </p>
       <p className="w-full text-start">{client.phone}</p>
       {clientType === 'EMPLOYEE' ? (
-        <p>{client.salary}</p>
+        <p className={cn('w-full text-end flex justify-end')}>
+          <span className="mr-1">₹ </span> {client.salary || 0}
+        </p>
       ) : (
         <p className={cn('w-full text-end flex flex-col')}>
           <span
