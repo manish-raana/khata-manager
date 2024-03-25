@@ -130,6 +130,7 @@ const AddClientForm = ({ clientType, setShowNewStoreDialog }: any) => {
       phone: '',
       client_type: clientType,
       address: '',
+      salary: clientType === 'EMPLOYEE' ? 0 : undefined,
     },
   })
 
@@ -139,6 +140,7 @@ const AddClientForm = ({ clientType, setShowNewStoreDialog }: any) => {
     address: string
     store_id: number
     client_type: string
+    salary?: number
   }) => {
     const { data: storeResponse, error: storeError } = await supabase
       .from('clients')
@@ -212,6 +214,28 @@ const AddClientForm = ({ clientType, setShowNewStoreDialog }: any) => {
             </FormItem>
           )}
         />
+        {clientType === 'EMPLOYEE' && (
+          <FormField
+            control={form.control}
+            name="salary"
+            render={({ field }) => (
+              <FormItem className="flex flex-col items-start">
+                <FormLabel className="text-left">Salary Amount</FormLabel>
+                <FormControl className="w-full">
+                  <Input
+                    type="number"
+                    placeholder="Enter a salary amount"
+                    {...field}
+                    onChange={(event) =>
+                      field.onChange(Number(event.target.value))
+                    }
+                  />
+                </FormControl>
+                <FormMessage className="text-xs" />
+              </FormItem>
+            )}
+          />
+        )}
         <FormField
           control={form.control}
           name="address"

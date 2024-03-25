@@ -38,6 +38,7 @@ export const AddClientFormSchema = z.object({
     required_error: 'You need to select a Client type.',
   }),
   address: z.string().min(2, { message: 'Please enter an address!' }),
+  salary: z.number().optional(),
 })
 export type AddClientFormType = z.infer<typeof AddClientFormSchema>
 

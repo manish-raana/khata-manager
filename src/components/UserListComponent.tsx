@@ -150,7 +150,9 @@ const UserListComponent = ({
     })
   }, [clientList, searchQuery, selectedFilter])
 
-  const columns = ['Name', 'Phone', 'NET Balance']
+  const dynamicColumn =
+    clientType === 'EMPLOYEE' ? 'Salary Amount' : 'NET Balance'
+  const columns = ['Name', 'Phone', dynamicColumn]
   return (
     <div className="flex flex-col space-y-4 w-full">
       <div className="flex items-center space-x-4">
@@ -168,7 +170,7 @@ const UserListComponent = ({
         )}
         <ScrollArea className="h-[600px] w-full">
           {filteredClientList.map((item: IClientType) => (
-            <CardRow key={item.id} client={item} />
+            <CardRow key={item.id} client={item} clientType={clientType} />
           ))}
         </ScrollArea>
       </div>
@@ -178,7 +180,13 @@ const UserListComponent = ({
 
 export default UserListComponent
 
-const CardRow = ({ client }: { client: IClientType }) => {
+const CardRow = ({
+  client,
+  clientType,
+}: {
+  client: IClientType
+  clientType: 'SUPPLIER' | 'CUSTOMER' | 'EMPLOYEE'
+}) => {
   const setSelectedClient = useSetRecoilState(selectedClientState)
   const selectedClient = useRecoilValue(selectedClientState)
 
@@ -204,21 +212,25 @@ const CardRow = ({ client }: { client: IClientType }) => {
         </span>
       </p>
       <p className="w-full text-start">{client.phone}</p>
-      <p className={cn('w-full text-end flex flex-col')}>
-        <span
-          className={cn(
-            client.net_balance < 0 && 'text-red-600',
-            client.net_balance > 0 && 'text-green-600'
-          )}
-        >
-          ₹ {client.net_balance || '0.0'}
-        </span>
-        {(client.net_balance > 0 || client.net_balance < 0) && (
-          <span className="capitalize text-xs">
-            {client.net_balance > 0 ? "You'll Give" : "You'll get"}
+      {clientType === 'EMPLOYEE' ? (
+        <p>{client.salary}</p>
+      ) : (
+        <p className={cn('w-full text-end flex flex-col')}>
+          <span
+            className={cn(
+              client.net_balance < 0 && 'text-red-600',
+              client.net_balance > 0 && 'text-green-600'
+            )}
+          >
+            ₹ {client.net_balance || '0.0'}
           </span>
-        )}
-      </p>
+          {(client.net_balance > 0 || client.net_balance < 0) && (
+            <span className="capitalize text-xs">
+              {client.net_balance > 0 ? "You'll Give" : "You'll get"}
+            </span>
+          )}
+        </p>
+      )}
     </div>
   )
 }

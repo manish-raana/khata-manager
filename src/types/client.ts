@@ -10,4 +10,5 @@ export type IClientType = {
   updated_at: string
   store_id: number
   client_type: 'CUSTOMER' | 'SUPPLIER' | 'EMPLOYEE'
+  salary?: number
 }

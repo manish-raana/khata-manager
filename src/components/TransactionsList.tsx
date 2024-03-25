@@ -95,20 +95,28 @@ const TransactionsList = () => {
           </p>
           <EditClient />
         </div>
-        <div className="bg-gray-100 rounded-lg md:flex items-center justify-between p-2 dark:bg-black dark:text-white">
+        <div className="bg-gray-100 rounded-lg md:flex items-start justify-between p-2 dark:bg-black dark:text-white">
           <div>
-            <p>Net Balance</p>
-            <p
-              className={cn(
-                totalNet === 0
-                  ? 'light:text-black dark:text-white'
-                  : totalGave > totalGot
-                    ? 'text-red-500'
-                    : 'text-green-500'
-              )}
-            >
-              ₹ {totalNet}
+            <p>
+              {selectedClient.client_type === 'EMPLOYEE'
+                ? 'Salary Amount'
+                : 'Net Balance'}
             </p>
+            {selectedClient.client_type === 'EMPLOYEE' ? (
+              <p>₹ {selectedClient?.salary || 0}</p>
+            ) : (
+              <p
+                className={cn(
+                  totalNet === 0
+                    ? 'light:text-black dark:text-white'
+                    : totalGave > totalGot
+                      ? 'text-red-500'
+                      : 'text-green-500'
+                )}
+              >
+                ₹ {totalNet}
+              </p>
+            )}
           </div>
           <div className="text-red-500">
             <p>You Gave</p>
