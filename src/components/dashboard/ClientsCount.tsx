@@ -58,8 +58,10 @@ const ClientsCount = () => {
   }
 
   useEffect(() => {
-    console.log('selectedStore: ', selectedStore)
-    getClientCount()
+    //console.log('selectedStore: ', selectedStore)
+    if (selectedStore && selectedStore.id) {
+      getClientCount()
+    }
   }, [selectedStore])
   return (
     <div>

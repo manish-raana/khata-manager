@@ -2,10 +2,11 @@ import { Metadata } from 'next'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { Overview } from '@/components/dashboard/overview'
-import { RecentSales } from '@/components/dashboard/recent-sales'
+import { RecentSales } from '@/components/dashboard/RecentTransactions'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
-import ClientsCount from '@/components/overview/clients-count'
+import ClientsCount from '@/components/dashboard/ClientsCount'
+import ClientPayouts from '@/components/dashboard/ClientPayouts'
 
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -47,18 +48,6 @@ export default async function DashboardPage() {
                 <CardTitle className="text-sm font-medium">
                   Total Customers
                 </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="font-bold">
-                  <ClientsCount />
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Total Suppliers
-                </CardTitle>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -75,61 +64,54 @@ export default async function DashboardPage() {
                 </svg>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">+2350</div>
+                <div className="font-bold">
+                  <ClientsCount />
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Supplier Payouts
+                </CardTitle>
+                ₹
+              </CardHeader>
+              <CardContent className="font-bold">
+                {/* <div className="text-2xl font-bold">+2350</div>
                 <p className="text-xs text-muted-foreground">
                   +180.1% from last month
-                </p>
+                </p> */}
+                <ClientPayouts clientType="SUPPLIER" />
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Total Employees
+                  Customer Payouts
                 </CardTitle>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="h-4 w-4 text-muted-foreground"
-                >
-                  <rect width="20" height="14" x="2" y="5" rx="2" />
-                  <path d="M2 10h20" />
-                </svg>
+                ₹
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">+12,234</div>
+              <CardContent className="font-bold">
+                {/* <div className="text-2xl font-bold">+12,234</div>
                 <p className="text-xs text-muted-foreground">
                   +19% from last month
-                </p>
+                </p> */}
+                <ClientPayouts clientType="CUSTOMER" />
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Active Now
+                  Employee Payouts
                 </CardTitle>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="h-4 w-4 text-muted-foreground"
-                >
-                  <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                </svg>
+                ₹
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">+573</div>
+              <CardContent className="font-bold">
+                {/* <div className="text-2xl font-bold">+573</div>
                 <p className="text-xs text-muted-foreground">
                   +201 since last hour
-                </p>
+                </p> */}
+                <ClientPayouts clientType="EMPLOYEE" />
               </CardContent>
             </Card>
           </div>

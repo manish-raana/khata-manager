@@ -23,7 +23,9 @@ export function RecentSales() {
     setTransactionsList(data)
   }
   useEffect(() => {
-    getClientTransactions()
+    if (selectedStore && selectedStore.id) {
+      getClientTransactions()
+    }
   }, [selectedStore])
 
   if (transactionsList?.length === 0) {
