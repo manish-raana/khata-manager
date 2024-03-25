@@ -1,21 +1,27 @@
 'use client'
+import { selectedStoresState } from '@/store/atoms/stores'
 import { createClient } from '@/utils/supabase/client'
 import React, { useEffect, useState } from 'react'
+import { useRecoilValue } from 'recoil'
 
 const ClientsCount = () => {
-  const [clientCount, setClientCount] = useState({
+  const initialCounts = {
     customers: 0,
     employees: 0,
     suppliers: 0,
-  })
+  }
+  const [clientCount, setClientCount] = useState(initialCounts)
 
+  const selectedStore = useRecoilValue(selectedStoresState)
   const supabase = createClient()
 
   const getClientCount = async () => {
+    setClientCount(initialCounts)
     const { data, error } = await supabase
       .from('clients')
       .select('client_type')
       .in('client_type', ['CUSTOMER', 'SUPPLIER', 'EMPLOYEE'])
+      .eq('store_id', selectedStore?.id)
 
     // Initialize counts for each type
     let customerCount = 0
@@ -52,8 +58,9 @@ const ClientsCount = () => {
   }
 
   useEffect(() => {
+    console.log('selectedStore: ', selectedStore)
     getClientCount()
-  }, [])
+  }, [selectedStore])
   return (
     <div>
       <p className="flex items-center justify-between w-full">
