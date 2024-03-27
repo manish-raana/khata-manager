@@ -11,7 +11,6 @@ import { AddNewTransaction } from './AddTransaction'
 import { EditClient } from './EditClient'
 import { formatDate } from '@/utils/formatDate'
 import { EditTransaction } from './EditTxn'
-import useSalaryPayouts from '@/store/hooks/useSalaryPayouts'
 
 const TransactionsList = () => {
   const selectedClient = useRecoilValue(selectedClientState)
@@ -19,7 +18,10 @@ const TransactionsList = () => {
   const [totalGave, setTotalGave] = React.useState(0)
   const [totalGot, setTotalGot] = React.useState(0)
 
-  const columns = ['Date', 'Description', 'You Gave', 'You Got']
+  const columns =
+    selectedClient?.client_type === 'EMPLOYEE'
+      ? ['Date', 'Description', 'Amount Paid']
+      : ['Date', 'Description', 'Debit', 'Credit']
   const { txnsList, getTxnsList } = useTxnsList()
   /* const { txnsList: monthlyTxnList, getTxnsList: getMonthlyTxnList } =
     useSalaryPayouts()
@@ -124,13 +126,24 @@ const TransactionsList = () => {
             )}
           </div>
           <div className="text-red-500">
-            <p>You Gave</p>
+            <p>
+              {selectedClient.client_type === 'EMPLOYEE'
+                ? 'Total Paid'
+                : 'Total Debit'}
+            </p>
             <p>₹ {totalGave}</p>
           </div>
-          <div className="text-green-500">
-            <p>You Got</p>
-            <p>₹ {totalGot}</p>
-          </div>
+          {selectedClient.client_type === 'EMPLOYEE' ? (
+            <div className="">
+              <p>Balance Left</p>
+              <p>₹ {selectedClient?.salary! - totalGave || 0}</p>
+            </div>
+          ) : (
+            <div className="text-green-500">
+              <p>Total Credit</p>
+              <p>₹ {totalGot}</p>
+            </div>
+          )}
           {selectedClient.client_type !== 'EMPLOYEE' && (
             <a
               className={cn(
@@ -180,19 +193,28 @@ const TransactionsList = () => {
               >
                 <p className="w-full text-start">{formatDate(item.date)}</p>
                 <p className="w-full text-center ">{item.description}</p>
-                <p className="w-full text-center text-red-500 pl-10">
+                <p
+                  className={cn(
+                    'w-full text-center text-red-500 pl-10',
+                    selectedClient.client_type === 'EMPLOYEE' && 'text-end'
+                  )}
+                >
                   {item.txn_type === 'GAVE' ? item.amount : '-'}
                 </p>
-                <p className="w-full text-end text-green-500">
-                  {item.txn_type === 'GOT' ? item.amount : '-'}
-                </p>
+                {selectedClient.client_type !== 'EMPLOYEE' && (
+                  <p className="w-full text-end text-green-500">
+                    {item.txn_type === 'GOT' ? item.amount : '-'}
+                  </p>
+                )}
               </div>
             ))}
           </ScrollArea>
         </Card>
         <div className="flex flex-col justify-start md:flex-row md:justify-center w-full md:space-x-12">
           <AddNewTransaction txnType="GAVE" getTxnsList={getTxnsList} />
-          <AddNewTransaction txnType="GOT" getTxnsList={getTxnsList} />
+          {selectedClient.client_type !== 'EMPLOYEE' && (
+            <AddNewTransaction txnType="GOT" getTxnsList={getTxnsList} />
+          )}
         </div>
       </div>
     </>

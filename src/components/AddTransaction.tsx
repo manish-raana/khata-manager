@@ -113,7 +113,11 @@ export function AddNewTransaction({
           variant="outline"
           onClick={() => setShowSheet(true)}
         >
-          {txnType === 'GAVE' ? 'You Gave' : 'You Got'}
+          {txnType === 'GAVE'
+            ? selectedClient?.client_type === 'EMPLOYEE'
+              ? 'Pay Amount'
+              : 'Debit'
+            : 'Credit'}
         </Button>
       </SheetTrigger>
       <SheetContent>

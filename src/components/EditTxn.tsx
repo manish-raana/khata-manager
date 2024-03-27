@@ -288,13 +288,13 @@ export function EditTransaction({
                         <FormControl>
                           <RadioGroupItem value="GAVE" />
                         </FormControl>
-                        <FormLabel className="font-normal">You Gave</FormLabel>
+                        <FormLabel className="font-normal">Debit</FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="GOT" />
                         </FormControl>
-                        <FormLabel className="font-normal">You Got</FormLabel>
+                        <FormLabel className="font-normal">Credit</FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>

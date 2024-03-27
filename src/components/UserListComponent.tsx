@@ -29,7 +29,11 @@ const UserListComponent = ({
   const selectedStore = useRecoilValue(selectedStoresState)
   const [clientList, setClientList] = useRecoilState(clientListState)
   const [selectedFilter, setSelectedFilter] = useState('all')
+  const setSelectedClient = useSetRecoilState(selectedClientState)
 
+  useEffect(() => {
+    setSelectedClient(null)
+  }, [])
   const handleFilterChange = (filterValue: any) => {
     //console.log('filterValue', filterValue)
     setSelectedFilter(filterValue)

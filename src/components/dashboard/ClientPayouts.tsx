@@ -52,7 +52,7 @@ const ClientPayouts = ({
   return (
     <div>
       <p className="flex items-center justify-between">
-        You Gave
+        Debited
         <span
           className={cn(
             payouts.gave < 0 && 'text-red-500',
@@ -64,7 +64,7 @@ const ClientPayouts = ({
         </span>
       </p>
       <p className="flex items-center justify-between">
-        You Got
+        Credited
         <span
           className={cn(
             payouts.got < 0 && 'text-red-500',
