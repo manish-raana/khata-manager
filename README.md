@@ -11,8 +11,8 @@ It uses Nextjs for the frontend and Supabase for authentication and backend
 ## How to run on your local
 
 1. create .env file and put the following variables
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
+NEXT_PUBLIC_SUPABASE_URL,
+NEXT_PUBLIC_SUPABASE_ANON_KEY
 
 ```bash
 run the following commands
