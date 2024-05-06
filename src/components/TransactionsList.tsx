@@ -11,12 +11,14 @@ import { AddNewTransaction } from './AddTransaction'
 import { EditClient } from './EditClient'
 import { formatDate } from '@/utils/formatDate'
 import { EditTransaction } from './EditTxn'
+import { EyeNoneIcon, EyeOpenIcon } from '@radix-ui/react-icons'
 
 const TransactionsList = () => {
   const selectedClient = useRecoilValue(selectedClientState)
   const [totalNet, setTotalNet] = React.useState(0)
   const [totalGave, setTotalGave] = React.useState(0)
   const [totalGot, setTotalGot] = React.useState(0)
+  const [showSalary, setShowSalary] = useState(false)
 
   const columns =
     selectedClient?.client_type === 'EMPLOYEE'
@@ -70,7 +72,7 @@ const TransactionsList = () => {
 
   if (selectedClient === null) {
     return (
-      <div className="flex items-center justify-center w-full h-[800px]">
+      <div className="flex items-center justify-center w-full h-[600px]">
         <p className="text-center text-gray-500 mt-4 text-2xl">
           No Client Selected
         </p>
@@ -110,7 +112,24 @@ const TransactionsList = () => {
                 : 'Net Balance'}
             </p>
             {selectedClient.client_type === 'EMPLOYEE' ? (
-              <p>₹ {selectedClient?.salary || 0}</p>
+              <p className="flex items-center">
+                <span className="mr-1">₹ </span>
+                {showSalary ? (
+                  <span>{selectedClient.salary || 0}</span>
+                ) : (
+                  <span>******</span>
+                )}
+                <span
+                  className="cursor-pointer ml-2"
+                  onClick={() => setShowSalary(!showSalary)}
+                >
+                  {showSalary ? (
+                    <EyeOpenIcon className="w-8" />
+                  ) : (
+                    <EyeNoneIcon className="w-8" />
+                  )}
+                </span>
+              </p>
             ) : (
               <p
                 className={cn(
@@ -173,7 +192,7 @@ const TransactionsList = () => {
           )}
         </div>
 
-        <Card className="bg-gray-100 rounded-md min-h-[500px] w-full p-0 dark:bg-black dark:text-white relative dark:border-black">
+        <Card className="bg-gray-100 rounded-md min-h-[450px] w-full p-0 dark:bg-black dark:text-white relative dark:border-black">
           <CardHeader columns={columns} />
 
           {txnsList.length === 0 && (
@@ -184,7 +203,7 @@ const TransactionsList = () => {
             </div>
           )}
 
-          <ScrollArea className="h-[400px] w-full overflow-y-scroll">
+          <ScrollArea className="h-[450px] w-full overflow-y-scroll">
             {txnsList.map((item: any) => (
               <div
                 key={item.id}

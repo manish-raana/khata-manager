@@ -69,7 +69,7 @@ export function AddNewClient({
         <DialogTrigger asChild>
           <Button
             variant={'outline'}
-            className="space-x-2"
+            className="space-x-2 capitalize"
             onClick={() => setShowNewStoreDialog(true)}
           >
             <Plus className="w-6 h-6" />
@@ -78,7 +78,9 @@ export function AddNewClient({
         </DialogTrigger>
         <DialogContent className="sm:max-w-[625px]">
           <DialogHeader>
-            <DialogTitle>Add New {clientType}</DialogTitle>
+            <DialogTitle className="capitalize">
+              Add New {clientType}
+            </DialogTitle>
             <DialogDescription>
               Enter the below details to add a new {clientType}
             </DialogDescription>
@@ -94,11 +96,15 @@ export function AddNewClient({
   return (
     <Drawer open={showNewStoreDialog} onOpenChange={setShowNewStoreDialog}>
       <DrawerTrigger asChild>
-        <Button variant="outline">Add New {clientType.toLowerCase()}</Button>
+        <Button className="capitalize" variant="outline">
+          Add New {clientType.toLowerCase()}
+        </Button>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
-          <DrawerTitle>Add New {clientType.toLowerCase()}</DrawerTitle>
+          <DrawerTitle className="capitalize">
+            Add New {clientType.toLowerCase()}
+          </DrawerTitle>
           <DrawerDescription>
             Enter the below details to add a new {clientType.toLowerCase()}
           </DrawerDescription>
@@ -208,7 +214,11 @@ const AddClientForm = ({ clientType, setShowNewStoreDialog }: any) => {
             <FormItem className="flex flex-col items-start">
               <FormLabel className="text-left">Phone Number</FormLabel>
               <FormControl className="w-full">
-                <PhoneInput placeholder="Enter a phone number" {...field} />
+                <PhoneInput
+                  defaultCountry="IN"
+                  placeholder="Enter a phone number"
+                  {...field}
+                />
               </FormControl>
               <FormMessage className="text-xs" />
             </FormItem>
@@ -263,7 +273,11 @@ const AddClientForm = ({ clientType, setShowNewStoreDialog }: any) => {
           >
             Cancel
           </Button>
-          <Button className="w-full" disabled={loading} type="submit">
+          <Button
+            className="w-full capitalize"
+            disabled={loading}
+            type="submit"
+          >
             {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
             Create {clientType.toLowerCase()}
           </Button>

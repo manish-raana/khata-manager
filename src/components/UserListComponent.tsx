@@ -19,6 +19,7 @@ import { IClientType } from '@/types/client'
 import { clientListState, selectedClientState } from '@/store/atoms/clients'
 import { selectedStoresState } from '@/store/atoms/stores'
 import { createClient } from '@/utils/supabase/client'
+import { EyeNoneIcon, EyeOpenIcon } from '@radix-ui/react-icons'
 
 const UserListComponent = ({
   clientType,
@@ -163,16 +164,16 @@ const UserListComponent = ({
         <ListSearch clientType={clientType} setSearchQuery={setSearchQuery} />
         <ListFilter onFilterChange={handleFilterChange} />
       </div>
-      <div className="bg-gray-100 rounded-md max-h-[690px] w-full p-0 dark:bg-black dark:text-white relative">
+      <div className="bg-gray-100 rounded-md max-h-[490px] w-full p-0 dark:bg-black dark:text-white relative">
         <CardHeader columns={columns} />
         {filteredClientList.length === 0 && (
-          <div className="flex w-full h-[600px] items-center justify-center absolute">
+          <div className="flex w-full h-[490px] items-center justify-center absolute">
             <p className="text-center text-gray-500 mt-4 text-2xl">
               No Data Available
             </p>
           </div>
         )}
-        <ScrollArea className="h-[400px] w-full">
+        <ScrollArea className="h-[490px] w-full">
           {filteredClientList.map((item: IClientType) => (
             <CardRow key={item.id} client={item} clientType={clientType} />
           ))}
@@ -193,7 +194,7 @@ const CardRow = ({
 }) => {
   const setSelectedClient = useSetRecoilState(selectedClientState)
   const selectedClient = useRecoilValue(selectedClientState)
-
+  const [showSalary, setShowSalary] = useState(false)
   return (
     <div
       className={cn(
@@ -218,7 +219,18 @@ const CardRow = ({
       <p className="w-full text-start">{client.phone}</p>
       {clientType === 'EMPLOYEE' ? (
         <p className={cn('w-full text-end flex justify-end')}>
-          <span className="mr-1">₹ </span> {client.salary || 0}
+          <span className="mr-1">₹ </span>
+          {showSalary ? <span>{client.salary || 0}</span> : <span>*****</span>}
+          <span
+            className="cursor-pointer"
+            onClick={() => setShowSalary(!showSalary)}
+          >
+            {showSalary ? (
+              <EyeOpenIcon className="w-8" />
+            ) : (
+              <EyeNoneIcon className="w-8" />
+            )}
+          </span>
         </p>
       ) : (
         <p className={cn('w-full text-end flex flex-col')}>
