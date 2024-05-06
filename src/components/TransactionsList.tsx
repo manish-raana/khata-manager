@@ -184,7 +184,7 @@ const TransactionsList = () => {
             </div>
           )}
 
-          <ScrollArea className="h-[500px] w-full overflow-y-scroll">
+          <ScrollArea className="h-[400px] w-full overflow-y-scroll">
             {txnsList.map((item: any) => (
               <div
                 key={item.id}
