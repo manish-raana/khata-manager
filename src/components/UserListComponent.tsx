@@ -172,7 +172,7 @@ const UserListComponent = ({
             </p>
           </div>
         )}
-        <ScrollArea className="h-[600px] w-full">
+        <ScrollArea className="h-[500px] w-full">
           {filteredClientList.map((item: IClientType) => (
             <CardRow key={item.id} client={item} clientType={clientType} />
           ))}
