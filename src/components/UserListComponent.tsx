@@ -164,16 +164,16 @@ const UserListComponent = ({
         <ListSearch clientType={clientType} setSearchQuery={setSearchQuery} />
         <ListFilter onFilterChange={handleFilterChange} />
       </div>
-      <div className="bg-gray-100 rounded-md max-h-[490px] w-full p-0 dark:bg-black dark:text-white relative">
+      <div className="bg-gray-100 rounded-md max-h-[690px] w-full p-0 dark:bg-black dark:text-white relative">
         <CardHeader columns={columns} />
         {filteredClientList.length === 0 && (
-          <div className="flex w-full h-[490px] items-center justify-center absolute">
+          <div className="flex w-full h-[600px] items-center justify-center absolute">
             <p className="text-center text-gray-500 mt-4 text-2xl">
               No Data Available
             </p>
           </div>
         )}
-        <ScrollArea className="h-[490px] w-full">
+        <ScrollArea className="h-[450px] w-full">
           {filteredClientList.map((item: IClientType) => (
             <CardRow key={item.id} client={item} clientType={clientType} />
           ))}
